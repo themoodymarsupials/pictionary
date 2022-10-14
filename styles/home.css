@@ -1,4 +1,4 @@
-li {
+#game-list li {
     display: grid;
     place-items: center;
     background: rgb(243, 235, 224);
@@ -17,12 +17,12 @@ li {
         1;
 }
 
-li img {
+#game-list li img {
     height: 100px;
     object-fit: contain;
 }
 
-li h2 {
+#game-list li h2 {
     font-size: 1em;
 }
 
