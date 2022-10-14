@@ -1,7 +1,7 @@
 li {
     display: grid;
     place-items: center;
-    background-color: beige;
+    background: rgb(243, 235, 224);
     height: 200px;
     width: 300px;
     border: 8px solid;
@@ -9,10 +9,10 @@ li {
     border-width: 10px;
     border-image: repeating-radial-gradient(
             circle at 10px,
-            turquoise,
-            pink 2px,
-            greenyellow 4px,
-            pink 2px
+            rgb(200, 224, 221),
+            rgb(217, 189, 193) 2px,
+            rgb(183, 194, 166) 4px,
+            rgb(241, 206, 212) 2px
         )
         1;
 }
