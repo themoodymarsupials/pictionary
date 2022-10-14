@@ -1,0 +1,40 @@
+li {
+    display: grid;
+    place-items: center;
+    background-color: beige;
+    height: 200px;
+    width: 300px;
+    border: 8px solid;
+    padding: 1rem;
+    border-width: 10px;
+    border-image: repeating-radial-gradient(
+            circle at 10px,
+            turquoise,
+            pink 2px,
+            greenyellow 4px,
+            pink 2px
+        )
+        1;
+}
+
+li img {
+    height: 100px;
+    object-fit: contain;
+}
+
+li h2 {
+    font-size: 1em;
+}
+
+#flaticon {
+    text-decoration: none;
+    color: initial;
+    font-size: xx-small;
+}
+
+#game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+    grid-auto-rows: 200px;
+    gap: 25px;
+}
