@@ -99,3 +99,7 @@
 #menu input:checked ~ ul {
     transform: none;
 }
+
+#logout {
+    width: 18px;
+}
