@@ -31,17 +31,27 @@
         <link rel="stylesheet" href="/styles/global.css" />
         <!-- add link for page specific css -->
         <link rel="stylesheet" href="/styles/add-game.css" />
+        <link rel="stylesheet" href="/styles/nav.css" />
     </head>
 
     <body>
         <header class="page-header">
             <p class="title">Create a game!</p>
-            <nav>
-                <a href="/">Home</a>
-                <a id="sign-out-link" href="/auth">Sign Out</a>
-            </nav>
         </header>
 
+        <nav>
+            <div id="menu">
+                <input type="checkbox" />
+                <span></span>
+                <span></span>
+                <span></span>
+                <ul id="menu-list">
+                    <a href="../"><li>Game Rooms</li></a>
+                    <a href="../about-us"><li>About</li></a>
+                    <a href="../auth"><li>Log out</li></a>
+                </ul>
+            </div>
+        </nav>
         <main>
             <form id="add-game-form">
                 <label>
