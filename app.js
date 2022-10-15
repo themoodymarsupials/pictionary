@@ -1,7 +1,5 @@
 /* Imports */
-// this will check if we have a user and set signout link if it exists
 // import './auth/user.js';
-// import { fabric } from 'fabric';
 import { addPath, onPath } from './fetch-utils.js';
 
 /* Get DOM Elements */
@@ -10,30 +8,37 @@ const canvasDest = new fabric.Canvas('canvas-dest');
 
 /* State */
 const canvas = new fabric.Canvas('canvas');
-canvas.isDrawingMode = true;
+canvasSrc.isDrawingMode = true;
+const paths = [];
+
 canvas.on('path:created', (options) => {
     console.log(options);
 });
 
 /* Events */
+
 window.addEventListener('load', async () => {
+    // Realtime Path Rendering from database
     onPath(async (payload) => {
+        // Get path from database
         const copyPath = payload.new;
+        paths.push(copyPath.path);
+        // Format paths correctly for inserting into canvas
         const copyPathObj = {
             version: '5.2.4',
-            path: copyPath.path,
+            objects: paths,
         };
+        // Insert paths into destination canvas
         canvasDest.loadFromJSON(copyPathObj);
     });
 });
 
-canvasSrc.isDrawingMode = true;
+// Insert new paths into database
 canvasSrc.on('path:created', async () => {
     const json = canvasSrc.toJSON();
     const newPathIndex = json.objects.length - 1;
     const newPath = json.objects[newPathIndex];
 
-    canvasDest.loadFromJSON(json);
     const newPathObj = {
         path: newPath,
         index: newPathIndex,
@@ -41,8 +46,6 @@ canvasSrc.on('path:created', async () => {
 
     const response = await addPath(newPathObj);
     console.log(response);
-
-    // this would be over web-socket to/from the db after updating:
 });
 
 /* Display Functions */
