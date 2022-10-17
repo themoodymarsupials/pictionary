@@ -36,6 +36,15 @@ export async function getGames() {
     return await client.from('games').select('*');
 }
 
+export async function getGame(id) {
+    return await client
+        .from('games')
+        .select('*, guesses(*)')
+        .eq('id', id)
+        .order('created_at', { foreignTable: 'guesses', ascending: false })
+        .single();
+}
+
 export async function uploadImage(bucketName, imagePath, imageFile) {
     const bucket = client.storage.from(bucketName);
     const response = await bucket.upload(imagePath, imageFile, {
