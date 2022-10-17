@@ -1,10 +1,12 @@
 /* Imports */
 // import './auth/user.js';
-import { addPath, getPaths, onPath } from './fetch-utils.js';
+import { addPath, clearCanvas, getPaths, onPath } from './fetch-utils.js';
 
 /* Get DOM Elements */
 const canvasSrc = new fabric.Canvas('canvas-src');
-const canvasDest = new fabric.Canvas('canvas-dest');
+// const canvasDest = new fabric.Canvas('canvas-dest');
+
+const clearCanvasButton = document.getElementById('clear-canvas');
 
 const colorSelector = document.getElementById('color-selector');
 const brushWidthSelector = document.getElementById('brush-width');
@@ -21,6 +23,18 @@ let drawingColor = '#000000'; // Defaults to black
 let brushWidth = 10;
 
 /* Events */
+
+clearCanvasButton.addEventListener('click', async () => {
+    const response = await clearCanvas();
+    error = response.error;
+    if (error) {
+        displayError();
+    } else {
+        paths = [];
+        displayPaths();
+    }
+});
+
 window.addEventListener('load', async () => {
     // Realtime Path Rendering from database
     const response = await getPaths();
@@ -30,7 +44,7 @@ window.addEventListener('load', async () => {
         displayError();
     } else {
         paths = response.data.map((a) => a.path);
-        console.log(paths);
+        console.log('paths on load', paths);
         displayPaths();
     }
 
@@ -47,25 +61,25 @@ window.addEventListener('load', async () => {
 // Change To Select Mode
 selectModeSelector.addEventListener('input', () => {
     canvasMode = document.querySelector('input[name="mode-selector"]:checked').value;
-    console.log(`canvasMode changed to: ${canvasMode}`);
+    // console.log(`canvasMode changed to: ${canvasMode}`);
     updateBrush();
 });
 // Change To Draw Mode
 drawModeSelector.addEventListener('input', () => {
     canvasMode = document.querySelector('input[name="mode-selector"]:checked').value;
-    console.log(`canvasMode changed to: ${canvasMode}`);
+    // console.log(`canvasMode changed to: ${canvasMode}`);
     updateBrush();
 });
 // Change Drawing Color
 colorSelector.addEventListener('input', () => {
     drawingColor = colorSelector.value;
-    console.log(`color changed to: ${drawingColor}`);
+    // console.log(`color changed to: ${drawingColor}`);
     updateBrush();
 });
 // Change Brush Width
 brushWidthSelector.addEventListener('input', () => {
     brushWidth = brushWidthSelector.value;
-    console.log(`brush width changed to: ${brushWidth}`);
+    // console.log(`brush width changed to: ${brushWidth}`);
     updateBrush();
 });
 
@@ -81,7 +95,7 @@ canvasSrc.on('path:created', async () => {
     };
 
     const response = await addPath(newPathObj);
-    console.log(response);
+    // console.log(response);
 });
 
 function updateBrush() {
@@ -98,13 +112,14 @@ function updateBrush() {
 /* Display Functions */
 function displayPaths() {
     // Format paths correctly for inserting into canvas
+    // if(canva)
     const canvasPathsObj = {
         version: '5.2.4',
         objects: paths,
     };
 
     // console.log(canvasPathsObj);
-    canvasDest.loadFromJSON(canvasPathsObj);
+    // canvasDest.loadFromJSON(canvasPathsObj);
     canvasSrc.loadFromJSON(canvasPathsObj);
 }
 

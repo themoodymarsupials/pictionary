@@ -38,5 +38,9 @@ export async function getPaths() {
 }
 
 export function onPath(handlePath) {
-    client.from(`drawings`).on('INSERT', handlePath).subscribe();
+    client.from(`drawings`).on('ALL', handlePath).subscribe();
+}
+
+export async function clearCanvas() {
+    return await client.from('drawings').delete().eq('room', 1);
 }
