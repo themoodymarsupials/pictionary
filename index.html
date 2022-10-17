@@ -29,9 +29,9 @@
         <!-- css -->
         <link rel="stylesheet" href="/styles/reset.css" />
         <link rel="stylesheet" href="/styles/global.css" />
+        <link rel="stylesheet" href="/styles/nav.css" />
         <!-- add link for page specific css -->
         <link rel="stylesheet" href="/styles/home.css" />
-        <link rel="stylesheet" href="/styles/nav.css" />
     </head>
 
     <body>
@@ -54,26 +54,27 @@
             </div>
         </nav>
         <main>
-            <canvas id="canvas-src" width="300" height="300"></canvas>
-            <canvas id="canvas-dest" width="300" height="300"></canvas>
-            <ul id="game-list">
-                <li>
-                    <h2>Karl's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Rio's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Erik's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Dylan's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-            </ul>
+            <div class="canvas-container">
+                <h2>Drawing Canvas</h2>
+                <div class="drawing-mode-selectors">
+                    <input type="radio" id="draw-mode" name="mode-selector" value="draw" checked />
+                    <label for="draw-mode">Draw ✏️</label>
+                    <input type="radio" id="select-mode" name="mode-selector" value="select" />
+                    <label for="select-mode">Select 👆</label>
+                </div>
+
+                <input type="color" name="color" id="color-selector" />
+                <select name="brush-width" id="brush-width">
+                    <option value="6">Light</option>
+                    <option value="10" selected>Reg</option>
+                    <option value="14">Bold</option>
+                </select>
+                <canvas id="canvas-src" width="300" height="300"></canvas>
+                <canvas id="canvas-dest" width="300" height="300"></canvas>
+            </div>
+            <!-- <div class="canvas-container">
+                <canvas id="canvas-dest" width="300" height="300"></canvas>
+            </div> -->
         </main>
     </body>
     <footer>
