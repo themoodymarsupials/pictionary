@@ -32,6 +32,10 @@ export async function createGame(game) {
     return await client.from('games').insert(game);
 }
 
+export async function getGames() {
+    return await client.from('games').select('*');
+}
+
 export async function uploadImage(bucketName, imagePath, imageFile) {
     const bucket = client.storage.from(bucketName);
     const response = await bucket.upload(imagePath, imageFile, {
