@@ -45,6 +45,10 @@ export async function getGame(id) {
         .single();
 }
 
+export async function createGuess(guess) {
+    return await client.from('guesses').insert(guess).single();
+}
+
 export async function uploadImage(bucketName, imagePath, imageFile) {
     const bucket = client.storage.from(bucketName);
     const response = await bucket.upload(imagePath, imageFile, {
