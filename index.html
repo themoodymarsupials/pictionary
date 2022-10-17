@@ -11,7 +11,11 @@
         <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
 
         <!-- js -->
-        <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
+        ></script>
+        <script defer src="http://unpkg.com/fabric/dist/fabric.min.js"></script>
         <script type="module" src="app.js"></script>
 
         <!-- fonts -->
@@ -26,6 +30,7 @@
         <link rel="stylesheet" href="/styles/reset.css" />
         <link rel="stylesheet" href="/styles/global.css" />
         <!-- add link for page specific css -->
+        <link rel="stylesheet" href="/styles/canvas.css" />
     </head>
 
     <body>
@@ -39,7 +44,8 @@
         </header>
 
         <main>
-            <canvas id="canvas"></canvas>
+            <canvas id="canvas-src" width="300" height="300"></canvas>
+            <canvas id="canvas-dest" width="300" height="300"></canvas>
         </main>
     </body>
 </html>

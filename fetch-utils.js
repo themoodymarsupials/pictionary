@@ -1,5 +1,6 @@
-const SUPABASE_URL = '';
-const SUPABASE_KEY = '';
+const SUPABASE_URL = 'https://wyahsnckwfdvynrkcmfb.supabase.co';
+const SUPABASE_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5YWhzbmNrd2ZkdnlucmtjbWZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjU3Njg3NjAsImV4cCI6MTk4MTM0NDc2MH0.hjMjg_SGtAjMrQoqy7-O_U24VxEC35aarsWAtGT4oEU';
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* Auth related functions */
@@ -27,3 +28,11 @@ export async function signOutUser() {
 }
 
 /* Data functions */
+
+export async function addPath(path) {
+    return await client.from('drawings').insert(path).single();
+}
+
+export function onPath(handlePath) {
+    client.from(`drawings`).on('INSERT', handlePath).subscribe();
+}
