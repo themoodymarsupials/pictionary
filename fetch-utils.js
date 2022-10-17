@@ -28,3 +28,6 @@ export async function signOutUser() {
 }
 
 /* Data functions */
+export async function createGame(game) {
+    return await client.from('games').insert(game);
+}
