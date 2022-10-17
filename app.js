@@ -51,7 +51,13 @@ window.addEventListener('load', async () => {
     onPath(async (payload) => {
         // Get path from database
         const copyPath = payload.new;
-        paths.push(copyPath.path);
+        console.log('payload: ', payload);
+
+        if (payload.eventType === 'DELETE') {
+            paths = [];
+        } else {
+            paths.push(copyPath.path);
+        }
         // Insert paths into destination canvas
         displayPaths();
     });

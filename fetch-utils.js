@@ -38,7 +38,7 @@ export async function getPaths() {
 }
 
 export function onPath(handlePath) {
-    client.from(`drawings`).on('ALL', handlePath).subscribe();
+    client.from(`drawings`).on('*', handlePath).subscribe();
 }
 
 export async function clearCanvas() {
