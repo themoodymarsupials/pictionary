@@ -15,7 +15,8 @@
     },
     "globals": {
         "QUnit": false,
-        "supabase": false
+        "supabase": false,
+        "fabric": false
     },
     "rules": {
         "eqeqeq": ["error", "always"],

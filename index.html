@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
         <!-- title and favicon -->
-        <title>Pictionary</title>
+        <title>Supabase Web App</title>
         <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
 
         <!-- js -->
@@ -15,6 +15,7 @@
             defer
             src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
         ></script>
+        <script defer src="http://unpkg.com/fabric/dist/fabric.min.js"></script>
         <script type="module" src="app.js"></script>
 
         <!-- fonts -->
@@ -53,6 +54,8 @@
             </div>
         </nav>
         <main>
+            <canvas id="canvas-src" width="300" height="300"></canvas>
+            <canvas id="canvas-dest" width="300" height="300"></canvas>
             <ul id="game-list">
                 <li>
                     <h2>Karl's Pictionary Game</h2>
