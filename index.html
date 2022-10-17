@@ -47,6 +47,13 @@
         <main>
             <div class="canvas-container">
                 <h2>Drawing Canvas</h2>
+                <div class="drawing-mode-selectors">
+                    <input type="radio" id="draw-mode" name="mode-selector" value="draw" checked />
+                    <label for="draw-mode">Draw ✏️</label>
+                    <input type="radio" id="select-mode" name="mode-selector" value="select" />
+                    <label for="select-mode">Select 👆</label>
+                </div>
+
                 <input type="color" name="color" id="color-selector" />
                 <select name="brush-width" id="brush-width">
                     <option value="6">Light</option>

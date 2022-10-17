@@ -7,19 +7,21 @@ const canvasSrc = new fabric.Canvas('canvas-src');
 const canvasDest = new fabric.Canvas('canvas-dest');
 const colorSelector = document.getElementById('color-selector');
 const brushWidthSelector = document.getElementById('brush-width');
+const drawModeSelector = document.getElementById('draw-mode');
+const selectModeSelector = document.getElementById('select-mode');
 
 /* State */
 const canvas = new fabric.Canvas('canvas');
 const paths = [];
+let canvasMode = 'draw';
 let drawingColor = '#000000'; // Defaults to black
 let brushWidth = 10;
-
-// Fabric initializing stuff
-canvasSrc.isDrawingMode = true;
 
 canvas.on('path:created', (options) => {
     console.log(options);
 });
+
+console.log(document.querySelector('input[name="mode-selector"]:checked').value);
 
 /* Events */
 window.addEventListener('load', async () => {
@@ -39,6 +41,18 @@ window.addEventListener('load', async () => {
     updateBrush();
 });
 
+// Change To Select Mode
+selectModeSelector.addEventListener('input', () => {
+    canvasMode = document.querySelector('input[name="mode-selector"]:checked').value;
+    console.log(`canvasMode changed to: ${canvasMode}`);
+    updateBrush();
+});
+// Change To Draw Mode
+drawModeSelector.addEventListener('input', () => {
+    canvasMode = document.querySelector('input[name="mode-selector"]:checked').value;
+    console.log(`canvasMode changed to: ${canvasMode}`);
+    updateBrush();
+});
 // Change Drawing Color
 colorSelector.addEventListener('input', () => {
     drawingColor = colorSelector.value;
@@ -68,6 +82,12 @@ canvasSrc.on('path:created', async () => {
 });
 
 function updateBrush() {
+    // Fabric updating stuff
+    if (canvasMode === 'draw') {
+        canvasSrc.isDrawingMode = true;
+    } else {
+        canvasSrc.isDrawingMode = false;
+    }
     canvasSrc.freeDrawingBrush.color = drawingColor;
     canvasSrc.freeDrawingBrush.width = brushWidth;
 }
