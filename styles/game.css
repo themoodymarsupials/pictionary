@@ -1,0 +1,41 @@
+main {
+    display: grid;
+    grid-template-rows: auto 2px auto 1fr;
+    gap: 10px;
+}
+
+.game-summary {
+    display: grid;
+    background: floralwhite;
+    border: darkolivegreen 10px outset;
+}
+
+#game-title {
+    align-self: center;
+    padding-left: 20px;
+}
+
+#game-image {
+    width: 100px;
+    height: 100%;
+    object-fit: contain;
+    padding-top: 25px;
+    padding-bottom: 15px;
+}
+
+#add-guess-form {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+}
+
+input {
+    height: 50px;
+}
+
+button {
+    height: 50px;
+}
+
+#guess-list li {
+    background: floralwhite;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- metadata -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+        <!-- title and favicon -->
+        <title>Pictionary</title>
+
+        <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
+
+        <!-- js -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
+        ></script>
+        <script type="module" src="add-game.js"></script>
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&family=Titillium+Web:wght@200;400;600&display=swap"
+        />
+
+        <!-- css -->
+        <link rel="stylesheet" href="/styles/reset.css" />
+        <link rel="stylesheet" href="/styles/global.css" />
+        <!-- add link for page specific css -->
+        <link rel="stylesheet" href="/styles/game.css" />
+        <link rel="stylesheet" href="/styles/nav.css" />
+    </head>
+
+    <body>
+        <header class="page-header">
+            <p class="title">Let's play!</p>
+        </header>
+
+        <nav>
+            <div id="menu">
+                <input type="checkbox" />
+                <span></span>
+                <span></span>
+                <span></span>
+                <ul id="menu-list">
+                    <a href="../"><li>Game Rooms</li></a>
+                    <a href="../about-us"><li>About</li></a>
+                    <a href="../auth"
+                        ><li>Log out<img id="logout" src="../assets/logout.png" /></li
+                    ></a>
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+            <section class="game-summary">
+                <h2 id="game-title">Post</h2>
+                <img id="game-image" src="../assets/game-placeholder.png" />
+            </section>
+
+            <p id="error-display"></p>
+
+            <div>
+                <form id="add-guess-form">
+                    <input name="text" placeholder="Add your guess here..." />
+                    <button>Submit</button>
+                </form>
+            </div>
+
+            <ul id="guess-list"></ul>
+        </main>
+    </body>
+</html>
