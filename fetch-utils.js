@@ -31,3 +31,16 @@ export async function signOutUser() {
 export async function createGame(game) {
     return await client.from('games').insert(game);
 }
+
+export async function uploadImage(bucketName, imagePath, imageFile) {
+    const bucket = client.storage.from(bucketName);
+    const response = await bucket.upload(imagePath, imageFile, {
+        cacheControl: '3600',
+    });
+    if (response.error) {
+        return null;
+    }
+    // Construct the URL to this image:
+    const url = `${SUPABASE_URL}/storage/v1/object/public/${response.data.Key}`;
+    return url;
+}
