@@ -38,4 +38,12 @@ button {
 
 #guess-list li {
     background: floralwhite;
+    border: darkolivegreen 5px outset;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+#add-guess-section {
+    display: grid;
+    grid-template-rows: 1fr 200px;
 }

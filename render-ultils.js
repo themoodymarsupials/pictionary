@@ -15,3 +15,9 @@ export function renderGame(game) {
 
     return li;
 }
+
+export function renderGuess(guess) {
+    const li = document.createElement('li');
+    li.textContent = guess.guess;
+    return li;
+}
