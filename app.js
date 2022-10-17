@@ -1,35 +1,36 @@
 /* Imports */
 // import './auth/user.js';
-import { addPath, onPath } from './fetch-utils.js';
+import { addPath, getPaths, onPath } from './fetch-utils.js';
 
 /* Get DOM Elements */
 const canvasSrc = new fabric.Canvas('canvas-src');
 const canvasDest = new fabric.Canvas('canvas-dest');
 
 /* State */
-const canvas = new fabric.Canvas('canvas');
 canvasSrc.isDrawingMode = true;
-const paths = [];
-
-canvas.on('path:created', (options) => {
-    console.log(options);
-});
+let paths = [];
+let error = null;
 
 /* Events */
-
 window.addEventListener('load', async () => {
     // Realtime Path Rendering from database
+    const response = await getPaths();
+    error = response.error;
+
+    if (error) {
+        displayError();
+    } else {
+        paths = response.data.map((a) => a.path);
+        console.log(paths);
+        displayPaths();
+    }
+
     onPath(async (payload) => {
         // Get path from database
         const copyPath = payload.new;
         paths.push(copyPath.path);
-        // Format paths correctly for inserting into canvas
-        const copyPathObj = {
-            version: '5.2.4',
-            objects: paths,
-        };
         // Insert paths into destination canvas
-        canvasDest.loadFromJSON(copyPathObj);
+        displayPaths();
     });
 });
 
@@ -49,3 +50,17 @@ canvasSrc.on('path:created', async () => {
 });
 
 /* Display Functions */
+function displayPaths() {
+    // Format paths correctly for inserting into canvas
+    const canvasPathsObj = {
+        version: '5.2.4',
+        objects: paths,
+    };
+
+    // console.log(canvasPathsObj);
+    canvasDest.loadFromJSON(canvasPathsObj);
+}
+
+function displayError() {
+    console.error(error);
+}

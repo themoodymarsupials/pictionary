@@ -33,6 +33,10 @@ export async function addPath(path) {
     return await client.from('drawings').insert(path).single();
 }
 
+export async function getPaths() {
+    return await client.from('drawings').select('path');
+}
+
 export function onPath(handlePath) {
     client.from(`drawings`).on('INSERT', handlePath).subscribe();
 }
