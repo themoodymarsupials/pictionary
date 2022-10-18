@@ -9,6 +9,11 @@
     padding: 1rem;
 }
 
+#timer {
+    grid-column: 1 /-1;
+    grid-row: 1;
+}
+
 .draw-mode-icon {
     height: 2rem;
     margin-left: -0.2rem;
