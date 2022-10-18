@@ -49,4 +49,17 @@ button {
 #add-guess-section {
     display: grid;
     grid-template-rows: 1fr 200px;
+    max-width: 750px;
+}
+
+#canvas-options {
+    width: 500px;
+    display: grid;
+    justify-self: center;
+}
+
+#game-view {
+    width: 750px;
+    display: grid;
+    justify-self: center;
 }

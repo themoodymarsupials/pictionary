@@ -104,6 +104,10 @@ export async function updateGame({ id, gameInProgress }) {
         .single();
 }
 
+export async function getWords() {
+    return await client.from('words').select('word');
+}
+
 // export function onGameUpdate(handleUpdate) {
 //     client.from(`games`).on('*', handleUpdate).eq('id', id).subscribe();
 // }

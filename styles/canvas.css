@@ -31,8 +31,14 @@
     padding: 0;
 }
 
+#canvas-section {
+    margin: 0 auto;
+    height: min-content;
+    width: min-content;
+    padding: 0;
+}
+
 .canvas-container {
     /* grid-column: 1 / -1; */
-    margin: 0 auto;
     border: 1px solid #999;
 }

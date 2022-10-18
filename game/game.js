@@ -1,6 +1,6 @@
 //imports
 import '../auth/user.js';
-import { getGame, createGuess, onGuess, getGuess, updateGame } from '../fetch-utils.js';
+import { getGame, createGuess, getWords, onGuess, getGuess, updateGame } from '../fetch-utils.js';
 import { renderGuess } from '../render-ultils.js';
 
 //DOM
@@ -10,6 +10,7 @@ const gameImage = document.getElementById('game-image');
 const addGuessForm = document.getElementById('add-guess-form');
 const guessList = document.getElementById('guess-list');
 const timer = document.getElementById('timer');
+const randomWord = document.getElementById('random-word');
 const startGameButton = document.getElementById('start-game');
 
 //state
@@ -20,6 +21,7 @@ let game = null;
 
 // inprogress: timer running, people can draw, people can guess
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
+let word = [];
 
 //events
 startGameButton.addEventListener('click', async () => {
@@ -38,9 +40,17 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    const response = await getGame(id);
-    error = response.error;
-    game = response.data;
+    const gameResponse = await getGame(id);
+    const wordsResponse = await getWords();
+
+    function handleResponse(response, type) {
+        error = response.error;
+        type === 'game' && (game = response.data);
+        type === 'word' && (word = response.data);
+    }
+
+    handleResponse(gameResponse, 'game');
+    handleResponse(wordsResponse, 'word');
 
     if (error) {
         displayError();
@@ -90,6 +100,11 @@ function timerTick() {
     displayTime();
     // console.log('time: ', time);
 }
+
+generateButton.addEventListener('click', () => {
+    const randomNumber = Math.floor(Math.random() * word.length);
+    randomWord.textContent = word[randomNumber].word;
+});
 
 //display functions
 function displayGame() {

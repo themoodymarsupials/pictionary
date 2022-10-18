@@ -69,11 +69,19 @@
                 <img src="../assets/pencil.png" id="pencil-image" /> Let's play!
                 <img src="../assets/pencil.png" id="pencil-image-two" />
             </h2>
-            <section class="game-summary nes-container is-rounded">
+
+            <section id="game-view" class="game-summary nes-input">
                 <p id="game-title">Post</p>
                 <img id="game-image" src="../assets/game-placeholder.png" />
             </section>
-            <section class="game-summary canvas-options nes-container is-rounded">
+
+            <section id="generate-word-section" class="nes-input">
+                <h3>Click below to generate a word to draw!</h3>
+                <button class="nes-btn is-warning" id="generate-button">GENERATE A WORD</button>
+                <p id="random-word"></p>
+            </section>
+
+            <section id="canvas-options" class="game-summary canvas-options nes-input">
                 <span id="timer"></span>
                 <input type="color" name="color" id="color-selector" class="nes-input" />
                 <button type="button" id="draw-mode" class="nes-btn is-primary">
@@ -85,7 +93,9 @@
                 <button id="clear-canvas" class="nes-btn">Reset</button>
             </section>
 
-            <canvas id="canvas-src"></canvas>
+            <section id="canvas-section" class="nes-container">
+                <canvas id="canvas-src"></canvas>
+            </section>
 
             <button id="start-game" class="nes-btn">Start Game</button>
 
