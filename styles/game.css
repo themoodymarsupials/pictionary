@@ -8,8 +8,7 @@
 
 .game-summary {
     display: grid;
-    background: floralwhite;
-    border: darkolivegreen 10px outset;
+    background: rgb(239, 239, 239);
     justify-items: center;
 }
 
@@ -29,6 +28,8 @@
 #add-guess-form {
     display: grid;
     grid-template-columns: 1fr 100px;
+    max-width: 885;
+    margin-bottom: 15px;
 }
 
 input {
@@ -37,13 +38,11 @@ input {
 
 button {
     height: 50px;
-    width: 150px;
 }
 
 #guess-list li {
-    background: floralwhite;
-    border: darkolivegreen 5px outset;
-    margin-bottom: 5px;
+    background: rgb(232, 232, 232);
+    margin-bottom: 15px;
     padding: 5px;
 }
 
