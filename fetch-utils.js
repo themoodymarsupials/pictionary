@@ -77,3 +77,9 @@ export function onPath(handlePath) {
 export async function clearCanvas() {
     return await client.from('drawings').delete().eq('room', 1);
 }
+
+/* User Profiles */
+
+export async function updateProfile(profile) {
+    return await client.from('profiles').upsert(profile).single();
+}

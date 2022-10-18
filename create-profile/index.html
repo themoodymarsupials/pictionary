@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- metadata -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+        <!-- title and favicon -->
+        <title>Pictionary</title>
+
+        <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
+
+        <!-- js -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
+        ></script>
+        <script type="module" src="create-profile.js"></script>
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&family=Titillium+Web:wght@200;400;600&display=swap"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- css -->
+        <link rel="stylesheet" href="/styles/reset.css" />
+        <link rel="stylesheet" href="/styles/global.css" />
+        <!-- add link for page specific css -->
+        <link rel="stylesheet" href="/styles/create-profile.css" />
+        <link rel="stylesheet" href="/styles/nav.css" />
+        <!-- NES CSS theme -->
+        <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <header class="page-header">
+            <p class="title"></p>
+        </header>
+        <nav>
+            <div id="menu">
+                <input type="checkbox" />
+                <span></span>
+                <span></span>
+                <span></span>
+                <ul id="menu-list">
+                    <a href="../"><li>Game Rooms</li></a>
+                    <a href="../add-game"><li>Create Game Room</li></a>
+                    <a href="../auth"
+                        ><li>Log out<img id="logout" src="../assets/logout.png" /></li
+                    ></a>
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+            <form id="profile-form">
+                <label>
+                    <div>Username</div>
+                    <input name="username" required placeholder="choose a username..." />
+                </label>
+
+                <label>
+                    <div>Pronouns</div>
+                    <textarea name="pronouns" required placeholder="pronouns"></textarea>
+                </label>
+
+                <label>
+                    <div>Avatar</div>
+                    <input type="file" name="avatar_url" placeholder="upload an image..." />
+                    <img
+                        id="preview"
+                        class="avatar"
+                        alt="avatar preview"
+                        src="/assets/pencil (1).png"
+                    />
+                </label>
+
+                <button id="create-profile-button">Create Profile</button>
+
+                <p id="error-display"></p>
+            </form>
+        </main>
+    </body>
+</html>
