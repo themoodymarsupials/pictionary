@@ -1,6 +1,6 @@
 //imports
 import '../auth/user.js';
-import { getGame, createGuess } from '../fetch-utils.js';
+import { getGame, createGuess, onGuess, getGuess } from '../fetch-utils.js';
 import { renderGuess } from '../render-ultils.js';
 
 //DOM
@@ -41,6 +41,19 @@ window.addEventListener('load', async () => {
         displayGame();
         displayGuesses();
     }
+
+    onGuess(game.id, async (payload) => {
+        const guessId = payload.new.id;
+        const guessResponse = await getGuess(guessId);
+        error = guessResponse.error;
+        if (error) {
+            displayError();
+        } else {
+            const guess = guessResponse.data;
+            game.guesses.unshift(guess);
+            displayGuesses();
+        }
+    });
 });
 
 addGuessForm.addEventListener('submit', async (e) => {
@@ -57,9 +70,6 @@ addGuessForm.addEventListener('submit', async (e) => {
     if (error) {
         displayError();
     } else {
-        const guess = response.data;
-        game.guesses.unshift(guess);
-        displayGuesses();
         addGuessForm.reset();
     }
 });
@@ -67,7 +77,7 @@ addGuessForm.addEventListener('submit', async (e) => {
 function timerTick() {
     if (time > 0) time -= 1000;
     displayTime();
-    console.log('time: ', time);
+    // console.log('time: ', time);
 }
 
 //display functions
