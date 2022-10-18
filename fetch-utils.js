@@ -74,16 +74,16 @@ export async function addPath(path) {
     return await client.from('drawings').insert(path).single();
 }
 
-export async function getPaths() {
-    return await client.from('drawings').select('path');
+export async function getPaths(gameId) {
+    return await client.from('drawings').select('path').eq('room', gameId);
 }
 
 export function onPath(handlePath) {
     client.from(`drawings`).on('*', handlePath).subscribe();
 }
 
-export async function clearCanvas() {
-    return await client.from('drawings').delete().eq('room', 1);
+export async function clearCanvas(gameId) {
+    return await client.from('drawings').delete().eq('room', gameId);
 }
 
 // export async function populateWords(word) {

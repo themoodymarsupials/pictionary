@@ -1,6 +1,6 @@
 /* Imports */
 // import './auth/user.js';
-import { addPath, clearCanvas, getPaths, onPath } from '../fetch-utils.js';
+import { addPath, clearCanvas, getPaths, onPath, getGame } from '../fetch-utils.js';
 
 /* Get DOM Elements */
 const canvasSrc = new fabric.Canvas('canvas-src', {
@@ -17,6 +17,7 @@ const eraseModeSelector = document.getElementById('erase-mode');
 /* State */
 let paths = [];
 let error = null;
+let game = null;
 
 canvasSrc.freeDrawingBrush.width = 10;
 let drawMode = 'draw';
@@ -25,7 +26,7 @@ let drawingColorCache = drawingColor; // Saves color
 
 /* Events */
 clearCanvasButton.addEventListener('click', async () => {
-    const response = await clearCanvas();
+    const response = await clearCanvas(game.id);
     error = response.error;
     if (error) {
         displayError();
@@ -36,8 +37,24 @@ clearCanvasButton.addEventListener('click', async () => {
 });
 
 window.addEventListener('load', async () => {
-    // Realtime Path Rendering from database
-    const response = await getPaths();
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get('id');
+
+    if (!id) {
+        location.replace('/');
+        return;
+    }
+
+    const gameResponse = await getGame(id);
+    error = gameResponse.error;
+    game = gameResponse.data;
+
+    if (error) {
+        displayError();
+    }
+
+    console.log('game:', game);
+    const response = await getPaths(game.id);
     error = response.error;
 
     if (error) {
@@ -51,12 +68,15 @@ window.addEventListener('load', async () => {
     onPath(async (payload) => {
         // Get path from database
         const copyPath = payload.new;
-        console.log('payload: ', payload);
+        console.log('copypath: ', copyPath);
 
-        if (payload.eventType === 'DELETE') {
-            paths = [];
-        } else if (payload.eventType === 'INSERT') {
-            paths.push(copyPath.path);
+        if (copyPath.room === game.id) {
+            if (payload.eventType === 'DELETE') {
+                paths = [];
+            } else if (payload.eventType === 'INSERT') {
+                console.log('copypath.path', copyPath.path);
+                paths.push(copyPath.path);
+            }
         }
         // Insert paths into destination canvas
         displayPaths();
@@ -69,10 +89,11 @@ canvasSrc.on('path:created', async () => {
     const json = canvasSrc.toJSON();
     const newPathIndex = json.objects.length - 1;
     const newPath = json.objects[newPathIndex];
-
+    console.log('game', game);
     const newPathObj = {
         path: newPath,
         index: newPathIndex,
+        room: game.id,
     };
 
     const response = await addPath(newPathObj);
