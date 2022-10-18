@@ -25,6 +25,5 @@ export function renderGuess(guess) {
     const li = document.createElement('li');
     li.textContent = guess.guess;
     li.classList.add('nes-container');
-    li.classList.add('is-rounded');
     return li;
 }
