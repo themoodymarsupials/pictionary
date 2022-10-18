@@ -1,3 +1,33 @@
-canvas {
+.canvas-options {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: 4rem auto;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    column-gap: 4rem;
+    padding: 1rem;
+}
+
+.draw-mode-icon {
+    height: 2rem;
+    margin-left: -0.2rem;
+    margin-top: -0.2rem;
+}
+
+#draw-mode,
+#erase-mode,
+#color-selector {
+    height: 3rem;
+    width: 3rem;
+}
+
+#color-selector {
+    padding: 0;
+}
+
+.canvas-container {
+    /* grid-column: 1 / -1; */
+    margin: 0 auto;
     border: 1px solid #999;
 }

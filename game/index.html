@@ -16,6 +16,8 @@
             defer
             src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
         ></script>
+        <script defer src="http://unpkg.com/fabric/dist/fabric.min.js"></script>
+        <script type="module" src="canvas.js"></script>
         <script type="module" src="game.js"></script>
 
         <!-- fonts -->
@@ -36,6 +38,7 @@
         <!-- add link for page specific css -->
         <link rel="stylesheet" href="/styles/game.css" />
         <link rel="stylesheet" href="/styles/nav.css" />
+        <link rel="stylesheet" href="/styles/canvas.css" />
         <!-- NES CSS theme -->
         <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
     </head>
@@ -61,7 +64,7 @@
             </div>
         </nav>
 
-        <main>
+        <main class="game-main">
             <h2 class="header-title">
                 <img src="../assets/pencil.png" id="pencil-image" /> Let's play!
                 <img src="../assets/pencil.png" id="pencil-image-two" />
@@ -70,17 +73,34 @@
                 <p id="game-title">Post</p>
                 <img id="game-image" src="../assets/game-placeholder.png" />
             </section>
+            <section class="game-summary canvas-options">
+                <input type="color" name="color" id="color-selector" class="nes-input" />
+                <button type="button" id="draw-mode" class="nes-btn is-primary">
+                    <img src="../assets/pencil (1).png" class="draw-mode-icon" />
+                </button>
+                <button type="button" id="erase-mode" class="nes-btn is-warning">
+                    <img src="../assets/eraser.png" class="draw-mode-icon" />
+                </button>
+                <button id="clear-canvas" class="nes-btn">Reset</button>
+            </section>
+
+            <canvas id="canvas-src"></canvas>
 
             <section #add-guess-section>
-                <ul id="guess-list"></ul>
                 <div>
                     <form id="add-guess-form">
                         <input name="guess" placeholder="Add your guess here..." />
                         <button>Submit</button>
                     </form>
+                    <ul id="guess-list"></ul>
                 </div>
             </section>
         </main>
         <p id="error-display"></p>
     </body>
+    <footer>
+        <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons"
+            >Pencil icons created by Freepik - Flaticon</a
+        >
+    </footer>
 </html>

@@ -85,3 +85,11 @@ header {
     text-align: center;
     padding: 30px;
 }
+
+footer {
+    font-size: 0.4rem;
+}
+
+.btn-active {
+    filter: brightness(75%);
+}
