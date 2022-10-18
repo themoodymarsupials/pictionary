@@ -1,134 +1,46 @@
 /* Imports */
-// import './auth/user.js';
-import { addPath, clearCanvas, getPaths, onPath } from './fetch-utils.js';
+// this will check if we have a user and set signout link if it exists
+import './auth/user.js';
+import { getGames } from './fetch-utils.js';
+import { renderGame } from './render-ultils.js';
 
 /* Get DOM Elements */
-const canvasSrc = new fabric.Canvas('canvas-src');
-// const canvasDest = new fabric.Canvas('canvas-dest');
-
-const clearCanvasButton = document.getElementById('clear-canvas');
-
-const colorSelector = document.getElementById('color-selector');
-const brushWidthSelector = document.getElementById('brush-width');
-const drawModeSelector = document.getElementById('draw-mode');
-const selectModeSelector = document.getElementById('select-mode');
+const gameList = document.getElementById('game-list');
+const errorDisplay = document.getElementById('error-display');
 
 /* State */
-canvasSrc.isDrawingMode = true;
-let paths = [];
 let error = null;
-
-let canvasMode = 'draw';
-let drawingColor = '#000000'; // Defaults to black
-let brushWidth = 10;
+let games = [];
 
 /* Events */
-
-clearCanvasButton.addEventListener('click', async () => {
-    const response = await clearCanvas();
-    error = response.error;
-    if (error) {
-        displayError();
-    } else {
-        paths = [];
-        displayPaths();
-    }
-});
-
 window.addEventListener('load', async () => {
-    // Realtime Path Rendering from database
-    const response = await getPaths();
+    const response = await getGames();
     error = response.error;
+    games = response.data;
 
     if (error) {
         displayError();
-    } else {
-        paths = response.data.map((a) => a.path);
-        console.log('paths on load', paths);
-        displayPaths();
     }
 
-    onPath(async (payload) => {
-        // Get path from database
-        const copyPath = payload.new;
-        console.log('payload: ', payload);
-
-        if (payload.eventType === 'DELETE') {
-            paths = [];
-        } else {
-            paths.push(copyPath.path);
-        }
-        // Insert paths into destination canvas
-        displayPaths();
-    });
-    updateBrush();
-});
-
-// Change To Select Mode
-selectModeSelector.addEventListener('input', () => {
-    canvasMode = document.querySelector('input[name="mode-selector"]:checked').value;
-    // console.log(`canvasMode changed to: ${canvasMode}`);
-    updateBrush();
-});
-// Change To Draw Mode
-drawModeSelector.addEventListener('input', () => {
-    canvasMode = document.querySelector('input[name="mode-selector"]:checked').value;
-    // console.log(`canvasMode changed to: ${canvasMode}`);
-    updateBrush();
-});
-// Change Drawing Color
-colorSelector.addEventListener('input', () => {
-    drawingColor = colorSelector.value;
-    // console.log(`color changed to: ${drawingColor}`);
-    updateBrush();
-});
-// Change Brush Width
-brushWidthSelector.addEventListener('input', () => {
-    brushWidth = brushWidthSelector.value;
-    // console.log(`brush width changed to: ${brushWidth}`);
-    updateBrush();
-});
-
-// Insert new paths into database
-canvasSrc.on('path:created', async () => {
-    const json = canvasSrc.toJSON();
-    const newPathIndex = json.objects.length - 1;
-    const newPath = json.objects[newPathIndex];
-
-    const newPathObj = {
-        path: newPath,
-        index: newPathIndex,
-    };
-
-    const response = await addPath(newPathObj);
-    // console.log(response);
-});
-
-function updateBrush() {
-    // Fabric updating stuff
-    if (canvasMode === 'draw') {
-        canvasSrc.isDrawingMode = true;
-    } else {
-        canvasSrc.isDrawingMode = false;
+    if (games) {
+        displayGames();
     }
-    canvasSrc.freeDrawingBrush.color = drawingColor;
-    canvasSrc.freeDrawingBrush.width = brushWidth;
-}
+});
 
 /* Display Functions */
-function displayPaths() {
-    // Format paths correctly for inserting into canvas
-    // if(canva)
-    const canvasPathsObj = {
-        version: '5.2.4',
-        objects: paths,
-    };
+function displayGames() {
+    gameList.innerHTML = '';
 
-    // console.log(canvasPathsObj);
-    // canvasDest.loadFromJSON(canvasPathsObj);
-    canvasSrc.loadFromJSON(canvasPathsObj);
+    for (const game of games) {
+        const gameEl = renderGame(game);
+        gameList.append(gameEl);
+    }
 }
 
 function displayError() {
-    console.error(error);
+    if (error) {
+        errorDisplay.textContent = error.message;
+    } else {
+        errorDisplay.textContent = '';
+    }
 }

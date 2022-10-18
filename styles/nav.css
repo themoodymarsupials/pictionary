@@ -12,11 +12,11 @@
 
 #menu a {
     text-decoration: none;
-    color: initial;
+    color: #cdcdcd;
 }
 
 #menu a:hover {
-    color: darkcyan;
+    color: black;
 }
 
 #menu input {
@@ -81,7 +81,7 @@
     padding: 50px;
     padding-top: 125px;
 
-    background: #c1eec9;
+    background: #1100ff;
     list-style-type: none;
     -webkit-font-smoothing: antialiased;
 

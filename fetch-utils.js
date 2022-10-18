@@ -28,6 +28,39 @@ export async function signOutUser() {
 }
 
 /* Data functions */
+export async function createGame(game) {
+    return await client.from('games').insert(game);
+}
+
+export async function getGames() {
+    return await client.from('games').select('*');
+}
+
+export async function getGame(id) {
+    return await client
+        .from('games')
+        .select('*, guesses(*)')
+        .eq('id', id)
+        .order('created_at', { foreignTable: 'guesses', ascending: false })
+        .single();
+}
+
+export async function createGuess(guess) {
+    return await client.from('guesses').insert(guess).single();
+}
+
+export async function uploadImage(bucketName, imagePath, imageFile) {
+    const bucket = client.storage.from(bucketName);
+    const response = await bucket.upload(imagePath, imageFile, {
+        cacheControl: '3600',
+    });
+    if (response.error) {
+        return null;
+    }
+    // Construct the URL to this image:
+    const url = `${SUPABASE_URL}/storage/v1/object/public/${response.data.Key}`;
+    return url;
+}
 
 export async function addPath(path) {
     return await client.from('drawings').insert(path).single();
