@@ -25,6 +25,12 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&family=Titillium+Web:wght@200;400;600&display=swap"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+        />
 
         <!-- css -->
         <link rel="stylesheet" href="/styles/reset.css" />
@@ -32,11 +38,14 @@
         <!-- add link for page specific css -->
         <link rel="stylesheet" href="/styles/add-game.css" />
         <link rel="stylesheet" href="/styles/nav.css" />
+
+        <!-- NES CSS theme -->
+        <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
     </head>
 
     <body>
         <header class="page-header">
-            <p class="title">Create a game!</p>
+            <img src="/assets/logo.png" id="logo-image" />
         </header>
 
         <nav>
@@ -55,19 +64,39 @@
             </div>
         </nav>
         <main>
-            <form id="add-game-form">
-                <label>
-                    Title
-                    <input name="title" />
-                </label>
-                <label id="add-image-section">
-                    Add an image for your game!
-                    <input type="file" name="image" id="image-input" />
-                    <img src="../assets/game-placeholder.png" id="form-image" />
-                </label>
-                <button id="add-game-button">Create</button>
-            </form>
+            <h2 class="header-title">
+                <img src="../assets/pencil.png" id="pencil-image" /> Create a game!
+                <img src="../assets/pencil.png" id="pencil-image-two" />
+            </h2>
+            <div id="form-div">
+                <form id="add-game-form" class="nes-container is-rounded">
+                    <label>
+                        Title
+                        <input name="title" id="title-input" class="nes-input is-error" />
+                    </label>
+                    <label id="add-image-section">
+                        Add an image for your game!
+                        <input
+                            type="file"
+                            name="image"
+                            id="image-input"
+                            class="nes-input is-error"
+                        />
+                        <img
+                            src="../assets/game-placeholder.png"
+                            id="form-image"
+                            class="displayed"
+                        />
+                    </label>
+                    <button id="add-game-button" class="nes-btn">Create</button>
+                </form>
+            </div>
             <p id="error-display"></p>
         </main>
     </body>
+    <footer>
+        <a href="https://www.flaticon.com/free-icons/pencil" id="flaticon" title="pencil icons"
+            >Pencil icons created by Freepik - Flaticon</a
+        >
+    </footer>
 </html>

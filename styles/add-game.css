@@ -1,24 +1,40 @@
 #add-game-form {
-    background: rgb(243, 235, 224);
+    background: rgb(237, 236, 235);
     display: grid;
-    width: 400px;
-    min-height: 400px;
-    padding: 20px;
+    width: 600px;
+    min-height: 600px;
+}
+
+#form-div {
+    display: grid;
     justify-items: center;
-    border-radius: 25px;
+    align-items: center;
+    margin-top: auto;
 }
 
 #form-image {
-    width: 40%;
+    width: 300px;
     padding: 10px;
+    image-rendering: pixelated;
+}
+
+#form-image.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 input {
     display: grid;
     padding-bottom: 20x;
     text-align: left;
-    width: 300px;
+    width: 400px;
     padding-top: 20px;
+    background: white;
+}
+
+#title-input {
+    width: 544px;
 }
 
 form button {
@@ -29,6 +45,8 @@ form button {
     color: white;
 }
 
-#add-image-section {
-    padding-left: 30px;
+#flaticon {
+    text-decoration: none;
+    color: initial;
+    font-size: 0.3em;
 }
