@@ -1,6 +1,6 @@
 //imports
 import '../auth/user.js';
-import { getGame, createGuess, onGuess, getGuess, setGameState } from '../fetch-utils.js';
+import { getGame, createGuess, onGuess, getGuess, updateGame } from '../fetch-utils.js';
 import { renderGuess } from '../render-ultils.js';
 
 //DOM
@@ -16,13 +16,16 @@ const startGameButton = document.getElementById('start-game');
 let time = 60000; // Start at 60s
 let error = null;
 let game = null;
-let gameState = 'pre'; //pre, inProgress, results
+// let gameInProgress = false;
+
+// inprogress: timer running, people can draw, people can guess
+// not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
 
 //events
 startGameButton.addEventListener('click', async () => {
-    game.game_state = 'inProgress';
+    game.gameInProgress = true;
     console.log('game:', game);
-    setGameState(game);
+    updateGame(game);
 });
 
 window.addEventListener('load', async () => {
