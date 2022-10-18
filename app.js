@@ -1,5 +1,6 @@
 /* Imports */
 // this will check if we have a user and set signout link if it exists
+// import { wordList } from './assets/words.js';
 import './auth/user.js';
 import { getGames } from './fetch-utils.js';
 import { renderGame } from './render-ultils.js';
@@ -44,3 +45,9 @@ function displayError() {
         errorDisplay.textContent = '';
     }
 }
+
+// function populateWords(wordList) {
+//     for (let word of wordList) {
+//         word = populateWords(word);
+//     }
+// }

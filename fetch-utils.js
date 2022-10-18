@@ -85,3 +85,7 @@ export function onPath(handlePath) {
 export async function clearCanvas() {
     return await client.from('drawings').delete().eq('room', 1);
 }
+
+// export async function populateWords(word) {
+//     return await client.from('words').insert({ word }).single();
+// }
