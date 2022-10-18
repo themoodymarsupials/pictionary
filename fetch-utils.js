@@ -86,6 +86,10 @@ export async function clearCanvas() {
     return await client.from('drawings').delete().eq('room', 1);
 }
 
+export async function getWords() {
+    return await client.from('words').select('word');
+}
+
 // export async function populateWords(word) {
 //     return await client.from('words').insert({ word }).single();
 // }

@@ -44,14 +44,14 @@ window.addEventListener('load', async () => {
         displayError();
     } else {
         paths = response.data.map((a) => a.path);
-        console.log('paths on load', paths);
+        // console.log('paths on load', paths);
         displayPaths();
     }
 
     onPath(async (payload) => {
         // Get path from database
         const copyPath = payload.new;
-        console.log('payload: ', payload);
+        // console.log('payload: ', payload);
 
         if (payload.eventType === 'DELETE') {
             paths = [];
@@ -126,7 +126,7 @@ function displayPaths() {
         version: '5.2.4',
         objects: paths,
     };
-    console.log('canvasSrc.objects: ', canvasSrc._objects);
+    // console.log('canvasSrc.objects: ', canvasSrc._objects);
     canvasSrc.loadFromJSON(canvasPathsObj);
 }
 
