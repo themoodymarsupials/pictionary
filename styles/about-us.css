@@ -1,0 +1,34 @@
+.card-container {
+    /* display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center; */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+    grid-auto-rows: ;
+
+    gap: 25px;
+}
+
+.card img {
+    width: 200px;
+    margin-top: -50px;
+}
+
+.card {
+    background-color: aquamarine;
+    display: grid;
+    justify-items: center;
+    width: 330px;
+    margin: 15px;
+    gap: 50px;
+}
+
+button {
+    display: grid;
+    justify-self: center;
+}
+
+.container {
+    font-size: smaller;
+}
