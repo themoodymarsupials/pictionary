@@ -1,6 +1,6 @@
 //imports
 import '../auth/user.js';
-import { getGame, createGuess, onGuess, getGuess } from '../fetch-utils.js';
+import { getGame, createGuess, onGuess, getGuess, setGameState } from '../fetch-utils.js';
 import { renderGuess } from '../render-ultils.js';
 
 //DOM
@@ -10,13 +10,21 @@ const gameImage = document.getElementById('game-image');
 const addGuessForm = document.getElementById('add-guess-form');
 const guessList = document.getElementById('guess-list');
 const timer = document.getElementById('timer');
+const startGameButton = document.getElementById('start-game');
 
 //state
 let time = 60000; // Start at 60s
 let error = null;
 let game = null;
+let gameState = 'pre'; //pre, inProgress, results
 
 //events
+startGameButton.addEventListener('click', async () => {
+    game.game_state = 'results';
+    console.log('game:', game);
+    setGameState(game);
+});
+
 window.addEventListener('load', async () => {
     setInterval(timerTick, 1000);
     const searchParams = new URLSearchParams(location.search);

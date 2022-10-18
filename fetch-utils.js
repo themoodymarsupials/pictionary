@@ -86,6 +86,31 @@ export async function clearCanvas(gameId) {
     return await client.from('drawings').delete().eq('room', gameId);
 }
 
+export async function setGameState({ id, game_state }) {
+    console.log('id, game_state', id, game_state);
+    // return await client
+    //     .from('games')
+    //     .update({
+    //         id: game.id,
+    //         game_state: game.gameState,
+    //     })
+    //     .eq('id', game.id)
+    //     .single();
+
+    return await client.from('games').update(game_state).eq('id', id).single();
+}
+
+// export async function getGameState(gameId) {
+
+// }
+
+// export async function addFavoriteRoom(roomId, userId) {
+//     return await client
+//         .from('room_favorites')
+//         .upsert({ room_id: roomId, user_id: userId })
+//         .single();
+// }
+
 // export async function populateWords(word) {
 //     return await client.from('words').insert({ word }).single();
 // }
