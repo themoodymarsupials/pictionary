@@ -20,7 +20,7 @@ let gameState = 'pre'; //pre, inProgress, results
 
 //events
 startGameButton.addEventListener('click', async () => {
-    game.game_state = 'results';
+    game.game_state = 'inProgress';
     console.log('game:', game);
     setGameState(game);
 });

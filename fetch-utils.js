@@ -97,7 +97,7 @@ export async function setGameState({ id, game_state }) {
     //     .eq('id', game.id)
     //     .single();
 
-    return await client.from('games').update(game_state).eq('id', id).single();
+    return await client.from('games').update({ game_state: game_state }).eq('id', id).single();
 }
 
 // export async function getGameState(gameId) {
