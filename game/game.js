@@ -1,6 +1,6 @@
 //imports
 import '../auth/user.js';
-import { getGame, createGuess } from '../fetch-utils.js';
+import { getGame, createGuess, getWords } from '../fetch-utils.js';
 import { renderGuess } from '../render-ultils.js';
 
 //DOM
@@ -10,11 +10,14 @@ const gameImage = document.getElementById('game-image');
 const addGuessForm = document.getElementById('add-guess-form');
 const guessList = document.getElementById('guess-list');
 const timer = document.getElementById('timer');
+const generateButton = document.getElementById('generate-button');
+const randomWord = document.getElementById('random-word');
 
 //state
 let time = 60000; // Start at 60s
 let error = null;
 let game = null;
+let word = [];
 
 //events
 window.addEventListener('load', async () => {
@@ -27,9 +30,17 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    const response = await getGame(id);
-    error = response.error;
-    game = response.data;
+    const gameResponse = await getGame(id);
+    const wordsResponse = await getWords();
+
+    function handleResponse(response, type) {
+        error = response.error;
+        type === 'game' && (game = response.data);
+        type === 'word' && (word = response.data);
+    }
+
+    handleResponse(gameResponse, 'game');
+    handleResponse(wordsResponse, 'word');
 
     if (error) {
         displayError();
@@ -67,8 +78,13 @@ addGuessForm.addEventListener('submit', async (e) => {
 function timerTick() {
     if (time > 0) time -= 1000;
     displayTime();
-    console.log('time: ', time);
+    // console.log('time: ', time);
 }
+
+generateButton.addEventListener('click', () => {
+    const randomNumber = Math.floor(Math.random() * word.length);
+    randomWord.textContent = word[randomNumber].word;
+});
 
 //display functions
 function displayGame() {
