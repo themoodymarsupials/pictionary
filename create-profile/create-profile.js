@@ -15,7 +15,7 @@ const preview = document.getElementById('preview');
 let profile = null;
 let error = null;
 
-const user = getUser;
+const user = getUser();
 
 /* Events */
 window.addEventListener('load', async () => {
