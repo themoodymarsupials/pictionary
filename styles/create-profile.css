@@ -1,9 +1,25 @@
 #profile-form {
     display: grid;
-    background-color: lightblue;
+    background-color: rgb(235, 235, 235);
     min-width: 500px;
     min-height: 550px;
     justify-items: center;
+    margin: auto 100px;
+    grid-template-rows: 1fr 1fr 0.6fr 1fr 0.6fr;
+    gap: 10px;
+}
+
+label {
+    width: 400px;
+}
+
+button {
+    height: 50px;
     margin: 100px;
-    /* grid-template-rows: ; */
+    color: blue;
+}
+
+#preview {
+    width: 100px;
+    padding: 20px;
 }
