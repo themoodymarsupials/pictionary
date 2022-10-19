@@ -3,6 +3,8 @@ const SUPABASE_KEY =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5YWhzbmNrd2ZkdnlucmtjbWZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjU3Njg3NjAsImV4cCI6MTk4MTM0NDc2MH0.hjMjg_SGtAjMrQoqy7-O_U24VxEC35aarsWAtGT4oEU';
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// console.log('client', client);
+
 /* Auth related functions */
 
 export function getUser() {
@@ -10,10 +12,14 @@ export function getUser() {
 }
 
 export async function signUpUser(email, password) {
-    return await client.auth.signUp({
+    console.log(email, password);
+    const banana = await client.auth.signUp({
         email,
         password,
     });
+    console.log(banana);
+    debugger;
+    return banana;
 }
 
 export async function signInUser(email, password) {

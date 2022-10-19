@@ -1,0 +1,9 @@
+#profile-form {
+    display: grid;
+    background-color: lightblue;
+    min-width: 500px;
+    min-height: 550px;
+    justify-items: center;
+    margin: 100px;
+    /* grid-template-rows: ; */
+}
