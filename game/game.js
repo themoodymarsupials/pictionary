@@ -8,8 +8,10 @@ import {
     getGuess,
     updateGame,
     onGameUpdate,
+    getGuesses,
 } from '../fetch-utils.js';
 import { renderGuess } from '../render-utils.js';
+import { resetCanvas } from './canvas.js';
 
 //DOM
 const errorDisplay = document.getElementById('error-display');
@@ -22,87 +24,72 @@ const randomWord = document.getElementById('random-word');
 const startGameButton = document.getElementById('start-game');
 
 //state
-let lengthOfGame = 60000; // Start at 60s
-// let timerInterval = null;
-let endTime = null;
-let timeLeft = 0;
-let error = null;
+let words = [];
+let guesses = [];
 let game = null;
-let word = [];
-// let guess = [];
-// let gameState = 'pre'; pre, inProgress, results
+let timeObj = null;
+let error = null;
 
 // inprogress: timer running, people can draw, people can guess
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
 
 //events
 startGameButton.addEventListener('click', async () => {
-    // Generate word
-    const randomNumber = Math.floor(Math.random() * word.length);
-    randomWord.textContent = word[randomNumber].word;
+    // if game is in progress -> deactivate button
+    if (game.game_in_progress === true) {
+        startGameButton.disabled = true;
+        return;
+    }
 
-    // Change Game state
+    // Update Game + Set timer
+    resetCanvas();
     game.game_in_progress = true;
+    game.word = generateWord();
     game.start_time = Date.now();
+    timeObj.endTime = game.start_time + timeObj.lengthOfGame;
     updateGame(game);
 });
 
 window.addEventListener('load', async () => {
+    // get gameID
     const searchParams = new URLSearchParams(location.search);
-    const id = searchParams.get('id');
-
-    if (!id) {
+    const gameId = searchParams.get('id');
+    if (!gameId) {
         location.replace('/');
         return;
     }
 
-    const gameResponse = await getGame(id);
-    const wordsResponse = await getWords();
-    // console.log(wordsResponse);
-
-    function handleResponse(response, type) {
-        error = response.error;
-        type === 'game' && (game = response.data);
-        type === 'word' && (word = response.data);
-    }
-
+    // Get game and word from database
+    const gameResponse = await getGame(gameId);
     handleResponse(gameResponse, 'game');
-    handleResponse(wordsResponse, 'word');
+    const wordsResponse = await getWords();
+    handleResponse(wordsResponse, 'words');
+    const guessesGetResponse = await getGuesses(gameId);
+    handleResponse(guessesGetResponse, 'guessesGet');
 
-    if (error) {
-        displayError();
-    }
-
+    // If NO game -> exit
     if (!game) {
         location.replace('/');
     } else {
-        if (game.game_in_progress) {
-            endTime = game.start_time + lengthOfGame;
-            setInterval(timerTick, 1000);
-        }
+        resetTimer();
+        configureTimer();
         displayGame();
         displayGuesses();
+        displayWord();
     }
 
     onGuess(game.id, async (payload) => {
         const guessId = payload.new.id;
-        const guessResponse = await getGuess(guessId);
-        error = guessResponse.error;
-        if (error) {
-            displayError();
-        } else {
-            const guess = guessResponse.data;
-            game.guesses.unshift(guess);
-            displayGuesses();
-        }
+        const guessGetResponse = await getGuess(guessId);
+        handleResponse(guessGetResponse, 'guessGet');
+        displayGuesses();
     });
 
     // execute on all game updates
     onGameUpdate(game.id, async (payload) => {
         game = payload.new;
-        if (game.game_in_progress === true) {
-            endTime = game.start_time + lengthOfGame;
-        }
+        configureTimer();
+        displayWord();
     });
 });
 
@@ -114,22 +101,69 @@ addGuessForm.addEventListener('submit', async (e) => {
         guess: formData.get('guess'),
         game_id: game.id,
     };
-    const response = await createGuess(guessInsert);
-    error = response.error;
+    const guessCreateResponse = await createGuess(guessInsert);
+    handleResponse(guessCreateResponse, 'guessCreate');
+});
 
+// Calls to database
+function handleResponse(response, type) {
+    // Handle calls to database
+    error = response.error;
     if (error) {
         displayError();
     } else {
-        addGuessForm.reset();
+        // this is called "short-circuit evaluation"
+        // second expression only executes if the first is true
+        // "if true" && "do this"
+        type === 'game' && (game = response.data);
+        type === 'words' && (words = response.data);
+        type === 'guessesGet' && (guesses = response.data);
+        type === 'guessGet' && guesses.unshift(response.data);
+        type === 'guessCreate' && addGuessForm.reset();
     }
-});
+}
 
+/* Utility Functions */
+function resetTimer() {
+    timeObj = {
+        lengthOfGame: 60000,
+        endTime: null,
+        timeLeft: 0,
+        Timer: null,
+    };
+}
+
+function configureTimer() {
+    // more "short-circuit evaluations"
+    if (game.game_in_progress) {
+        // If no current timer -> start timerTick
+        !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
+        // If no endTime -> calculate
+        !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
+    }
+}
+
+function generateWord() {
+    // get word from words array
+    const randomNumber = Math.floor(Math.random() * words.length);
+    return words[randomNumber].word;
+}
+
+// Executes every 1 second ~ called by setInterval(timerTick, 1000)
 function timerTick() {
-    timeLeft = Math.floor((endTime - Date.now()) / 1000);
-    // if (timeLeft <= 0) {
-    //     timeLeft = 0;
-    //     clearInterval(timerInterval);
-    // }
+    if (game.game_in_progress) {
+        // decrement timeLeft by 1 second
+        timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
+        // if time is up ->
+        if (timeObj.timeLeft < 0) {
+            timeObj.timeLeft = 0;
+            game.game_in_progress = false;
+            startGameButton.disabled = false;
+            clearInterval(timeObj.Timer);
+            resetTimer();
+            updateGame(game);
+        }
+    }
     displayTime();
 }
 
@@ -138,22 +172,22 @@ function displayGame() {
     gameTitle.textContent = game.title;
     gameImage.src = game.image_url;
 }
-
 function displayTime() {
-    timer.textContent = `${timeLeft} seconds`;
-    // console.log('timeLeft:', timeLeft);
-    // console.log(Date.now());
+    timer.textContent = `${timeObj.timeLeft} seconds`;
 }
-
+function displayWord() {
+    if (game.word) {
+        randomWord.textContent = game.word;
+    }
+}
 function displayGuesses() {
     guessList.innerHTML = '';
 
-    for (const guess of game.guesses) {
+    for (const guess of guesses) {
         const guessEl = renderGuess(guess);
         guessList.append(guessEl);
     }
 }
-
 function displayError() {
     if (error) {
         errorDisplay.textContent = error.message;

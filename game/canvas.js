@@ -25,17 +25,6 @@ let drawingColor = '#000000'; // Defaults to black
 let drawingColorCache = drawingColor; // Saves color
 
 /* Events */
-clearCanvasButton.addEventListener('click', async () => {
-    const response = await clearCanvas(game.id);
-    error = response.error;
-    if (error) {
-        displayError();
-    } else {
-        paths = [];
-        displayPaths();
-    }
-});
-
 window.addEventListener('load', async () => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -53,7 +42,6 @@ window.addEventListener('load', async () => {
         displayError();
     }
 
-    console.log('game:', game);
     const response = await getPaths(game.id);
     error = response.error;
 
@@ -68,13 +56,11 @@ window.addEventListener('load', async () => {
     onPath(async (payload) => {
         // Get path from database
         const copyPath = payload.new;
-        // console.log('payload: ', payload);
 
         if (copyPath.room === game.id) {
             if (payload.eventType === 'DELETE') {
                 paths = [];
             } else if (payload.eventType === 'INSERT') {
-                console.log('copypath.path', copyPath.path);
                 paths.push(copyPath.path);
             }
         }
@@ -84,12 +70,13 @@ window.addEventListener('load', async () => {
     updateBrush();
 });
 
+clearCanvasButton.addEventListener('click', resetCanvas);
+
 // Insert new paths into database
 canvasSrc.on('path:created', async () => {
     const json = canvasSrc.toJSON();
     const newPathIndex = json.objects.length - 1;
     const newPath = json.objects[newPathIndex];
-    console.log('game', game);
     const newPathObj = {
         path: newPath,
         index: newPathIndex,
@@ -99,7 +86,6 @@ canvasSrc.on('path:created', async () => {
     const response = await addPath(newPathObj);
     error = response.error;
     if (error) displayError();
-    // console.log(response);
 });
 
 // Change To Select Mode
@@ -123,6 +109,17 @@ colorSelector.addEventListener('input', () => {
     drawingColorCache = colorSelector.value;
     updateBrush();
 });
+
+export async function resetCanvas() {
+    const response = await clearCanvas(game.id);
+    error = response.error;
+    if (error) {
+        displayError();
+    } else {
+        paths = [];
+        displayPaths();
+    }
+}
 
 function updateBrush() {
     // Fabric updating stuff

@@ -49,6 +49,14 @@ export async function createGuess(guess) {
     return await client.from('guesses').insert(guess).single();
 }
 
+export async function getGuesses(gameId) {
+    return await client
+        .from('guesses')
+        .select(`*`)
+        .eq('game_id', gameId)
+        .order('created_at', { ascending: false });
+}
+
 export async function getGuess(id) {
     return await client.from('guesses').select(`*`).eq('id', id).single();
 }
@@ -86,11 +94,10 @@ export async function clearCanvas(gameId) {
     return await client.from('drawings').delete().eq('room', gameId);
 }
 
-export async function updateGame({ id, game_in_progress, start_time }) {
-    console.log(start_time);
+export async function updateGame({ id, game_in_progress, start_time, word }) {
     return await client
         .from('games')
-        .update({ game_in_progress, start_time })
+        .update({ game_in_progress, start_time, word })
         .eq('id', id)
         .single();
 }
@@ -100,8 +107,5 @@ export async function getWords() {
 }
 
 export function onGameUpdate(gameId, handleUpdate) {
-    // client.from(`games`).on('*', handleUpdate).eq('id', gameId).subscribe();
-    // client.from(`games:id=eq.${gameId}`).on('*', handleUpdate).subscribe();
-    console.log(gameId, handleUpdate);
     client.from(`games`).on('*', handleUpdate).subscribe();
 }
