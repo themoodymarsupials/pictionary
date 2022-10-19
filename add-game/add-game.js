@@ -17,9 +17,14 @@ addGameForm.addEventListener('submit', async (e) => {
 
     const formData = new FormData(addGameForm);
     const imageFile = formData.get('image');
-    const randomFolder = Math.floor(Date.now() * Math.random());
-    const imagePath = `/${randomFolder}/${imageFile.name}`;
-    const url = await uploadImage('images', imagePath, imageFile);
+
+    let url = null;
+
+    if (imageFile.name) {
+        const randomFolder = Math.floor(Date.now() * Math.random());
+        const imagePath = `/${randomFolder}/${imageFile.name}`;
+        url = await uploadImage('images', imagePath, imageFile);
+    }
 
     const game = {
         title: formData.get('title'),

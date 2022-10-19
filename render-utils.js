@@ -13,7 +13,11 @@ export function renderGame(game) {
     p.classList.add('title');
 
     const img = document.createElement('img');
-    img.src = game.image_url;
+    if (game.image_url) {
+        img.src = game.image_url;
+    } else {
+        img.src = '/assets/game-placeholder.png';
+    }
 
     a.append(p, img);
     li.append(a);
