@@ -91,6 +91,5 @@ export async function getProfile(id) {
 
 export async function getProfiles() {
     const response = await client.from('profiles').select('*');
-    console.log(response);
     return response;
 }
