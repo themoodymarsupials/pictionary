@@ -109,3 +109,19 @@ export async function getWords() {
 export function onGameUpdate(gameId, handleUpdate) {
     client.from(`games`).on('*', handleUpdate).subscribe();
 }
+
+/* User Profiles */
+
+export async function updateProfile(profile) {
+    return await client.from('profiles').upsert(profile).single();
+}
+
+export async function getProfile(id) {
+    const response = await client.from('profiles').select().match({ id }).maybeSingle();
+    return response;
+}
+
+export async function getProfiles() {
+    const response = await client.from('profiles').select('*');
+    return response;
+}

@@ -27,3 +27,26 @@ export function renderGuess(guess) {
     li.classList.add('nes-input');
     return li;
 }
+
+/* Render Profiles */
+export function renderProfile(profile, userId) {
+    const li = document.createElement('li');
+    li.classList.add('profile');
+
+    if (userId === profile.id) {
+        li.classList.add('self');
+    }
+
+    const userNameEl = document.createElement('h2');
+    userNameEl.textContent = profile.username;
+
+    const pronounsEl = document.createElement('p');
+    pronounsEl.classList.add('pronouns');
+    pronounsEl.textContent = profile.pronouns;
+
+    const avatarImage = document.createElement('img');
+    avatarImage.src = profile.avatar_url;
+
+    li.append(userNameEl, pronounsEl, avatarImage);
+    return li;
+}
