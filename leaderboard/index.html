@@ -9,14 +9,14 @@
         <!-- title and favicon -->
         <title>Pictionary</title>
 
-        <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
 
         <!-- js -->
         <script
             defer
             src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
         ></script>
-        <script type="module" src="create-profile.js"></script>
+        <script type="module" src="leaderboard.js"></script>
 
         <!-- fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -31,11 +31,11 @@
         />
 
         <!-- css -->
-        <link rel="stylesheet" href="/styles/reset.css" />
-        <link rel="stylesheet" href="/styles/global.css" />
+        <link rel="stylesheet" href="../styles/reset.css" />
+        <link rel="stylesheet" href="../styles/global.css" />
         <!-- add link for page specific css -->
-        <link rel="stylesheet" href="/styles/create-profile.css" />
-        <link rel="stylesheet" href="/styles/nav.css" />
+        <link rel="stylesheet" href="../styles/leaderboard.css" />
+        <link rel="stylesheet" href="../styles/nav.css" />
         <!-- NES CSS theme -->
         <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
     </head>
@@ -53,7 +53,7 @@
                 <ul id="menu-list">
                     <a href="../"><li>Game Rooms</li></a>
                     <a href="../add-game"><li>Create Game Room</li></a>
-                    <a href="../leaderboard"><li>Leaderboard</li></a>
+                    <a href="../create-profile"><li>Update Profile</li></a>
                     <a href="../auth"
                         ><li>Log out<img id="logout" src="../assets/logout.png" /></li
                     ></a>
@@ -62,37 +62,7 @@
         </nav>
 
         <main>
-            <form id="profile-form">
-                <label>
-                    <div>Username</div>
-                    <input name="username" required placeholder="choose a username..." />
-                </label>
-
-                <label>
-                    <div>Pronouns</div>
-                    <textarea name="pronouns" required placeholder="pronouns"></textarea>
-                </label>
-
-                <label>
-                    <div>Avatar</div>
-                    <input
-                        id="avatar-input"
-                        type="file"
-                        name="avatar_url"
-                        placeholder="upload an image..."
-                    />
-                    <img
-                        id="preview"
-                        class="avatar"
-                        alt="avatar preview"
-                        src="/assets/pencil (1).png"
-                    />
-                </label>
-
-                <button id="create-profile-button">Create Profile</button>
-
-                <p id="error-display"></p>
-            </form>
+            <ul id="profile-list"></ul>
         </main>
     </body>
 </html>

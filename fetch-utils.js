@@ -83,3 +83,14 @@ export async function clearCanvas() {
 export async function updateProfile(profile) {
     return await client.from('profiles').upsert(profile).single();
 }
+
+export async function getProfile(id) {
+    const response = await client.from('profiles').select().match({ id }).maybeSingle();
+    return response;
+}
+
+export async function getProfiles() {
+    const response = await client.from('profiles').select('*');
+    console.log(response);
+    return response;
+}
