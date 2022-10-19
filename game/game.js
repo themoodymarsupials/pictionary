@@ -18,6 +18,8 @@ let time = 60000; // Start at 60s
 let error = null;
 let game = null;
 let word = [];
+// let guess = [];
+// let gameState = 'pre'; pre, inProgress, results
 
 //events
 window.addEventListener('load', async () => {
