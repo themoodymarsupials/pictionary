@@ -29,7 +29,8 @@ let timeLeft = 0;
 let error = null;
 let game = null;
 let word = [];
-// let gameInProgress = false;
+// let guess = [];
+// let gameState = 'pre'; pre, inProgress, results
 
 // inprogress: timer running, people can draw, people can guess
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
