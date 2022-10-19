@@ -9,7 +9,7 @@ import {
     updateGame,
     onGameUpdate,
 } from '../fetch-utils.js';
-import { renderGuess } from '../render-ultils.js';
+import { renderGuess } from '../render-utils.js';
 
 //DOM
 const errorDisplay = document.getElementById('error-display');

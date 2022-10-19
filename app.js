@@ -3,7 +3,7 @@
 // import { wordList } from './assets/words.js';
 import './auth/user.js';
 import { getGames } from './fetch-utils.js';
-import { renderGame } from './render-ultils.js';
+import { renderGame } from './render-utils.js';
 
 /* Get DOM Elements */
 const gameList = document.getElementById('game-list');
