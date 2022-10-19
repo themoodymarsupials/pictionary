@@ -23,8 +23,9 @@ const startGameButton = document.getElementById('start-game');
 
 //state
 let lengthOfGame = 60000; // Start at 60s
+// let timerInterval = null;
 let endTime = null;
-let timeLeft = null;
+let timeLeft = 0;
 let error = null;
 let game = null;
 let word = [];
@@ -42,8 +43,6 @@ startGameButton.addEventListener('click', async () => {
     // Change Game state
     game.game_in_progress = true;
     game.start_time = Date.now();
-    console.log('game', game);
-    // console.log('game:', game);
     updateGame(game);
 });
 
@@ -83,9 +82,6 @@ window.addEventListener('load', async () => {
         displayGame();
         displayGuesses();
     }
-    console.log('game.start_time: ', game.start_time);
-    console.log('endTime: ', endTime);
-    console.log('timeLeft: ', timeLeft);
 
     onGuess(game.id, async (payload) => {
         const guessId = payload.new.id;
@@ -106,9 +102,6 @@ window.addEventListener('load', async () => {
         if (game.game_in_progress === true) {
             endTime = game.start_time + lengthOfGame;
         }
-        console.log('game.start_time: ', game.start_time);
-        console.log('endTime: ', endTime);
-        console.log('timeLeft: ', timeLeft);
     });
 });
 
@@ -131,12 +124,12 @@ addGuessForm.addEventListener('submit', async (e) => {
 });
 
 function timerTick() {
-    if (timeLeft < 0) return;
-    timeLeft = Math.floor(endTime - Date.now());
+    timeLeft = Math.floor((endTime - Date.now()) / 1000);
+    // if (timeLeft <= 0) {
+    //     timeLeft = 0;
+    //     clearInterval(timerInterval);
+    // }
     displayTime();
-    // if (timeLeft > 0) endTime -= 1000;
-    console.log(timeLeft);
-    // console.log('time: ', time);
 }
 
 //display functions
@@ -146,9 +139,8 @@ function displayGame() {
 }
 
 function displayTime() {
-    // console.log('timeLeft:', timeLeft);
     timer.textContent = `${timeLeft} seconds`;
-
+    // console.log('timeLeft:', timeLeft);
     // console.log(Date.now());
 }
 
