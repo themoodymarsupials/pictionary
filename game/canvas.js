@@ -55,15 +55,14 @@ window.addEventListener('load', async () => {
 
     onPath(async (payload) => {
         // Get path from database
-        const copyPath = payload.new;
-
-        if (copyPath.room === game.id) {
-            if (payload.eventType === 'DELETE') {
-                paths = [];
-            } else if (payload.eventType === 'INSERT') {
-                paths.push(copyPath.path);
-            }
+        const updateResponse = payload.new;
+        // Update Response is a new path
+        if (updateResponse.room === game.id) {
+            paths.push(updateResponse.path);
+        } else {
+            paths = [];
         }
+
         // Insert paths into destination canvas
         displayPaths();
     });
