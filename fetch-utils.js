@@ -12,13 +12,13 @@ export function getUser() {
 }
 
 export async function signUpUser(email, password) {
-    console.log(email, password);
+    // console.log(email, password);
     const banana = await client.auth.signUp({
         email,
         password,
     });
-    console.log(banana);
-    debugger;
+    // console.log(banana);
+    // debugger;
     return banana;
 }
 

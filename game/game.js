@@ -26,6 +26,7 @@ const startGameButton = document.getElementById('start-game');
 //state
 let words = [];
 let guesses = [];
+let guessCur = null;
 let game = null;
 let timeObj = null;
 let error = null;
@@ -95,15 +96,26 @@ window.addEventListener('load', async () => {
 
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const formData = new FormData(addGuessForm);
+    guessCur = formData.get('guess');
+
     const guessInsert = {
         guess: formData.get('guess'),
         game_id: game.id,
+        is_correct: checkGuess(),
     };
     const guessCreateResponse = await createGuess(guessInsert);
     handleResponse(guessCreateResponse, 'guessCreate');
 });
+
+function checkGuess() {
+    if (game.word === guessCur) {
+        console.log(game.word, guessCur);
+        return true;
+    } else {
+        return false;
+    }
+}
 
 // Calls to database
 function handleResponse(response, type) {
@@ -185,6 +197,9 @@ function displayGuesses() {
 
     for (const guess of guesses) {
         const guessEl = renderGuess(guess);
+        if (guess.is_correct) {
+            guessEl.classList.add('correct-answer');
+        }
         guessList.append(guessEl);
     }
 }

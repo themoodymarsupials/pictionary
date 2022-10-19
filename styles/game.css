@@ -63,3 +63,7 @@ button {
     display: grid;
     justify-self: center;
 }
+
+.correct-answer {
+    color: green;
+}
