@@ -86,20 +86,11 @@ export async function clearCanvas(gameId) {
     return await client.from('drawings').delete().eq('room', gameId);
 }
 
-export async function updateGame({ id, gameInProgress }) {
-    // console.log('id, game_state', id, game_state);
-    // return await client
-    //     .from('games')
-    //     .update({
-    //         id: game.id,
-    //         game_state: game.gameState,
-    //     })
-    //     .eq('id', game.id)
-    //     .single();
-
+export async function updateGame({ id, game_in_progress, start_time }) {
+    console.log(start_time);
     return await client
         .from('games')
-        .update({ game_in_progress: gameInProgress })
+        .update({ game_in_progress, start_time })
         .eq('id', id)
         .single();
 }
@@ -108,6 +99,9 @@ export async function getWords() {
     return await client.from('words').select('word');
 }
 
-// export function onGameUpdate(handleUpdate) {
-//     client.from(`games`).on('*', handleUpdate).eq('id', id).subscribe();
-// }
+export function onGameUpdate(gameId, handleUpdate) {
+    // client.from(`games`).on('*', handleUpdate).eq('id', gameId).subscribe();
+    // client.from(`games:id=eq.${gameId}`).on('*', handleUpdate).subscribe();
+    console.log(gameId, handleUpdate);
+    client.from(`games`).on('*', handleUpdate).subscribe();
+}

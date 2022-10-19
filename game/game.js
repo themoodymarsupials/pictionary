@@ -1,6 +1,14 @@
 //imports
 import '../auth/user.js';
-import { getGame, createGuess, getWords, onGuess, getGuess, updateGame } from '../fetch-utils.js';
+import {
+    getGame,
+    createGuess,
+    getWords,
+    onGuess,
+    getGuess,
+    updateGame,
+    onGameUpdate,
+} from '../fetch-utils.js';
 import { renderGuess } from '../render-ultils.js';
 
 //DOM
@@ -14,24 +22,32 @@ const randomWord = document.getElementById('random-word');
 const startGameButton = document.getElementById('start-game');
 
 //state
-let time = 60000; // Start at 60s
+let lengthOfGame = 60000; // Start at 60s
+let endTime = null;
+let timeLeft = null;
 let error = null;
 let game = null;
+let word = [];
 // let gameInProgress = false;
 
 // inprogress: timer running, people can draw, people can guess
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
-let word = [];
 
 //events
 startGameButton.addEventListener('click', async () => {
-    game.gameInProgress = true;
-    console.log('game:', game);
+    // Generate word
+    const randomNumber = Math.floor(Math.random() * word.length);
+    randomWord.textContent = word[randomNumber].word;
+
+    // Change Game state
+    game.game_in_progress = true;
+    game.start_time = Date.now();
+    console.log('game', game);
+    // console.log('game:', game);
     updateGame(game);
 });
 
 window.addEventListener('load', async () => {
-    setInterval(timerTick, 1000);
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
 
@@ -42,6 +58,7 @@ window.addEventListener('load', async () => {
 
     const gameResponse = await getGame(id);
     const wordsResponse = await getWords();
+    // console.log(wordsResponse);
 
     function handleResponse(response, type) {
         error = response.error;
@@ -59,9 +76,16 @@ window.addEventListener('load', async () => {
     if (!game) {
         location.replace('/');
     } else {
+        if (game.game_in_progress) {
+            endTime = game.start_time + lengthOfGame;
+            setInterval(timerTick, 1000);
+        }
         displayGame();
         displayGuesses();
     }
+    console.log('game.start_time: ', game.start_time);
+    console.log('endTime: ', endTime);
+    console.log('timeLeft: ', timeLeft);
 
     onGuess(game.id, async (payload) => {
         const guessId = payload.new.id;
@@ -74,6 +98,17 @@ window.addEventListener('load', async () => {
             game.guesses.unshift(guess);
             displayGuesses();
         }
+    });
+
+    // execute on all game updates
+    onGameUpdate(game.id, async (payload) => {
+        game = payload.new;
+        if (game.game_in_progress === true) {
+            endTime = game.start_time + lengthOfGame;
+        }
+        console.log('game.start_time: ', game.start_time);
+        console.log('endTime: ', endTime);
+        console.log('timeLeft: ', timeLeft);
     });
 });
 
@@ -96,15 +131,13 @@ addGuessForm.addEventListener('submit', async (e) => {
 });
 
 function timerTick() {
-    if (time > 0) time -= 1000;
+    if (timeLeft < 0) return;
+    timeLeft = Math.floor(endTime - Date.now());
     displayTime();
+    // if (timeLeft > 0) endTime -= 1000;
+    console.log(timeLeft);
     // console.log('time: ', time);
 }
-
-generateButton.addEventListener('click', () => {
-    const randomNumber = Math.floor(Math.random() * word.length);
-    randomWord.textContent = word[randomNumber].word;
-});
 
 //display functions
 function displayGame() {
@@ -113,7 +146,10 @@ function displayGame() {
 }
 
 function displayTime() {
-    timer.textContent = `${time / 1000} seconds`;
+    // console.log('timeLeft:', timeLeft);
+    timer.textContent = `${timeLeft} seconds`;
+
+    // console.log(Date.now());
 }
 
 function displayGuesses() {
