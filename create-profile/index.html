@@ -9,7 +9,7 @@
         <!-- title and favicon -->
         <title>Pictionary</title>
 
-        <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
 
         <!-- js -->
         <script
@@ -42,7 +42,7 @@
 
     <body>
         <header class="page-header">
-            <p class="title"></p>
+            <img src="/assets/logo.png" id="logo-image" />
         </header>
         <nav>
             <div id="menu">
@@ -60,7 +60,11 @@
         </nav>
 
         <main>
-            <form id="profile-form">
+            <h2 class="header-title">
+                <img src="../assets/pencil.png" id="pencil-image" /> Edit Your Profile
+                <img src="../assets/pencil.png" id="pencil-image-two" />
+            </h2>
+            <form id="profile-form" class="nes-container">
                 <label>
                     <div>Username</div>
                     <input
@@ -90,12 +94,7 @@
                         placeholder="upload an image..."
                     />
                 </label>
-                <img
-                    id="preview"
-                    class="avatar"
-                    alt="avatar preview"
-                    src="/assets/pencil (1).png"
-                />
+                <img id="preview" alt="avatar preview" src="/assets/pencil (1).png" />
 
                 <button id="create-profile-button" class="nes-btn">Create Profile</button>
             </form>
