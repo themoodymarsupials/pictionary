@@ -9,6 +9,9 @@ import {
     updateGame,
     onGameUpdate,
     getGuesses,
+    getUser,
+    getProfile,
+    updateProfile,
 } from '../fetch-utils.js';
 import { renderGuess } from '../render-utils.js';
 import { resetCanvas } from './canvas.js';
@@ -22,6 +25,7 @@ const guessList = document.getElementById('guess-list');
 const timer = document.getElementById('timer');
 const randomWord = document.getElementById('random-word');
 const startGameButton = document.getElementById('start-game');
+const claimDrawerButton = document.getElementById('claim-drawer-button');
 
 //state
 let words = [];
@@ -30,6 +34,8 @@ let guessCur = null;
 let game = null;
 let timeObj = null;
 let error = null;
+let userId = null;
+let userProfile = null;
 
 // inprogress: timer running, people can draw, people can guess
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
@@ -43,6 +49,7 @@ startGameButton.addEventListener('click', async () => {
     }
 
     // Update Game + Set timer
+    checkDrawer();
     resetCanvas();
     game.game_in_progress = true;
     game.word = generateWord();
@@ -51,7 +58,20 @@ startGameButton.addEventListener('click', async () => {
     updateGame(game);
 });
 
+claimDrawerButton.addEventListener('click', async () => {
+    userProfile.is_drawer = true;
+    const profileUpdateResponse = updateProfile(userProfile);
+    handleResponse(profileUpdateResponse, 'updateProfile');
+});
+
 window.addEventListener('load', async () => {
+    //get User and profile
+    const userResponse = await getUser();
+    handleResponse(userResponse, 'userId');
+
+    const userProfileResponse = await getProfile(userId);
+    handleResponse(userProfileResponse, 'userProfile');
+
     // get gameID
     const searchParams = new URLSearchParams(location.search);
     const gameId = searchParams.get('id');
@@ -117,6 +137,15 @@ function checkGuess() {
     }
 }
 
+function checkDrawer() {
+    if (userProfile.is_drawer) {
+        randomWord.classList.remove('hidden');
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Calls to database
 function handleResponse(response, type) {
     // Handle calls to database
@@ -132,6 +161,10 @@ function handleResponse(response, type) {
         type === 'guessesGet' && (guesses = response.data);
         type === 'guessGet' && guesses.unshift(response.data);
         type === 'guessCreate' && addGuessForm.reset();
+        type === 'userId' && (userId = response.id);
+        type === 'userProfile' && (userProfile = response.data);
+        type === 'updateProfile' && (userProfile = response.data);
+        // console.log(user);
     }
 }
 
