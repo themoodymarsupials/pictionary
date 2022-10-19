@@ -113,7 +113,7 @@ export async function getWords() {
 }
 
 export function onGameUpdate(gameId, handleUpdate) {
-    client.from(`games`).on('*', handleUpdate).subscribe();
+    client.from(`games`).on('UPDATE', handleUpdate).subscribe();
 }
 
 /* User Profiles */
