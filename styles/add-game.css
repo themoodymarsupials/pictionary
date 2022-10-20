@@ -43,6 +43,8 @@ form button {
     background: rgb(178, 178, 203);
     font-weight: bold;
     color: white;
+    display: flex;
+    justify-self: center;
 }
 
 #flaticon {

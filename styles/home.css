@@ -18,6 +18,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 25px;
+    padding-top: 100px;
 }
 
 #game-list a {
