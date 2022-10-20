@@ -83,7 +83,6 @@ window.addEventListener('load', async () => {
 
     // execute on all game updates
     onGameUpdate(game.id, async (payload) => {
-        console.log(payload.new);
         game = payload.new;
         configureTimer();
         displayWord();
@@ -203,12 +202,17 @@ function resetTimer() {
 
 function configureTimer() {
     // more "short-circuit evaluations"
-    console.log('game.game_in_progress', game.game_in_progress);
     if (game.game_in_progress) {
-        // If no current timer -> start timerTick
-        !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
         // If no endTime -> calculate
-        !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
+        if (!timeObj.endTime) {
+            timeObj.endTime = game.start_time + timeObj.lengthOfGame;
+        }
+        // If no current timer -> start timerTick
+        if (!timeObj.Timer) {
+            timeObj.Timer = setInterval(timerTick, 1000);
+        }
+        // !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
+        // !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
     }
 }
 
@@ -220,6 +224,7 @@ function generateWord() {
 
 // Executes every 1 second ~ called by setInterval(timerTick, 1000)
 function timerTick() {
+    // debugger;
     if (game.game_in_progress) {
         // decrement timeLeft by 1 second
         timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
