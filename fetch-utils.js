@@ -114,7 +114,7 @@ export async function getWords() {
 }
 
 export function onGameUpdate(gameId, handleUpdate) {
-    client.from(`games`).on('UPDATE', handleUpdate).subscribe();
+    client.from(`games:id=eq.${gameId}`).on('UPDATE', handleUpdate).subscribe();
 }
 
 /* User Profiles */

@@ -68,13 +68,6 @@ claimDrawerButton.addEventListener('click', async () => {
 });
 
 window.addEventListener('load', async () => {
-    //get User and profile
-    const userResponse = await getUser();
-    handleResponse(userResponse, 'userId');
-
-    const userProfileResponse = await getProfile(userId);
-    handleResponse(userProfileResponse, 'userProfile');
-
     // get gameID
     const searchParams = new URLSearchParams(location.search);
     const gameId = searchParams.get('id');
@@ -82,8 +75,13 @@ window.addEventListener('load', async () => {
         location.replace('/');
         return;
     }
+    //get User and profile
+    const userResponse = await getUser();
+    handleResponse(userResponse, 'userId');
+    const userProfileResponse = await getProfile(userId);
+    handleResponse(userProfileResponse, 'userProfile');
 
-    // Get game and word from database
+    // Get game/word/guesses from database
     const gameResponse = await getGame(gameId);
     handleResponse(gameResponse, 'game');
     const wordsResponse = await getWords();
@@ -102,18 +100,19 @@ window.addEventListener('load', async () => {
         displayWord();
     }
 
+    // execute on all game updates
+    onGameUpdate(game.id, async (payload) => {
+        console.log(payload.new);
+        game = payload.new;
+        configureTimer();
+        displayWord();
+    });
+
     onGuess(game.id, async (payload) => {
         const guessId = payload.new.id;
         const guessGetResponse = await getGuess(guessId);
         handleResponse(guessGetResponse, 'guessGet');
         displayGuesses();
-    });
-
-    // execute on all game updates
-    onGameUpdate(game.id, async (payload) => {
-        game = payload.new;
-        configureTimer();
-        displayWord();
     });
 });
 
@@ -121,7 +120,7 @@ addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(addGuessForm);
     guessCur = formData.get('guess').toLowerCase();
-
+    console.log(guessCur, game.id);
     const guessInsert = {
         guess: guessCur,
         game_id: game.id,
