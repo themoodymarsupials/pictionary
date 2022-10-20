@@ -76,3 +76,10 @@ button {
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
+
+#random-word {
+    text-align: center;
+    padding-top: 25px;
+    font-size: larger;
+    color: blue;
+}
