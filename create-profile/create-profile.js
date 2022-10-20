@@ -43,8 +43,15 @@ profileForm.addEventListener('submit', async (e) => {
     };
 
     const imageFile = formData.get('avatar_url');
-    const imagePath = `${user.id}/${imageFile.name}`;
-    const url = await uploadImage('images', imagePath, imageFile);
+    // const imagePath = `${user.id}/${imageFile.name}`;
+    // const url = await uploadImage('images', imagePath, imageFile);
+    let url = null;
+
+    if (imageFile.name) {
+        const randomFolder = Math.floor(Date.now() * Math.random());
+        const imagePath = `/${randomFolder}/${imageFile.name}`;
+        url = await uploadImage('images', imagePath, imageFile);
+    }
     profileUpdate.avatar_url = url;
 
     const response = await updateProfile(profileUpdate, user.id);
