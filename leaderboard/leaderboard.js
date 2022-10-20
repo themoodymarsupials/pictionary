@@ -18,7 +18,7 @@ window.addEventListener('load', async () => {
     profiles = response.data;
 
     if (error) {
-        console.log(error);
+        alert(error);
     }
     if (profiles) {
         displayProfiles();
