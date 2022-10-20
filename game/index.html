@@ -75,10 +75,11 @@
             </section>
 
             <section id="generate-word-section" class="nes-input">
-                <h3>Click start game to generate a word!</h3>
+                <h3 class="game-info" id="game-info">
+                    Click below to start a game and generate a word!
+                </h3>
                 <div id="game-buttons">
                     <button id="start-game" class="nes-btn">Start Game</button>
-                    <button class="nes-btn" id="claim-drawer-button">Claim Drawer</button>
                 </div>
                 <p id="random-word" class="hidden"></p>
             </section>
@@ -100,7 +101,6 @@
             </section>
 
             <section #add-guess-section>
-                <p id="game-info"></p>
                 <div>
                     <form id="add-guess-form">
                         <input name="guess" placeholder="Add your guess here..." required />

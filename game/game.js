@@ -105,6 +105,9 @@ startGameButton.addEventListener('click', async () => {
 
     // Update Game + Set timer
     gameInfo.textContent = 'The game has started!';
+    userProfile.is_drawer = true;
+    const profileUpdateResponse = await updateProfile(userProfile);
+    handleResponse(profileUpdateResponse, 'updateProfile');
 
     checkDrawer();
     resetCanvas();
@@ -115,16 +118,10 @@ startGameButton.addEventListener('click', async () => {
     updateGame(game);
 });
 
-claimDrawerButton.addEventListener('click', async () => {
-    userProfile.is_drawer = true;
-    const profileUpdateResponse = await updateProfile(userProfile);
-    handleResponse(profileUpdateResponse, 'updateProfile');
-});
-
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (checkDrawer()) {
-        gameInfo.textContent = 'You are a Drawer!';
+        gameInfo.textContent = 'You are the Drawer!';
         return;
     }
     const formData = new FormData(addGuessForm);
@@ -189,6 +186,7 @@ function stopGame() {
     clearInterval(timeObj.Timer);
     resetTimer();
     updateGame(game);
+    updateProfile(userProfile);
 }
 
 function resetTimer() {

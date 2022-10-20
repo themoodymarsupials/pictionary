@@ -73,8 +73,10 @@ button {
 
 #game-buttons {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    /* grid-template-columns: 1fr 1fr; */
+    /* gap: 20px; */
+    max-width: 50%;
+    margin: 20px auto 0;
 }
 
 #random-word {
