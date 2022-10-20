@@ -83,3 +83,10 @@ button {
     font-size: larger;
     color: blue;
 }
+
+#game-info {
+    text-align: center;
+    padding-top: 10px;
+    font-size: larger;
+    color: blue;
+}
