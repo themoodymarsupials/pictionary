@@ -26,7 +26,6 @@ const timer = document.getElementById('timer');
 const randomWord = document.getElementById('random-word');
 const gameInfo = document.getElementById('game-info');
 const startGameButton = document.getElementById('start-game');
-const claimDrawerButton = document.getElementById('claim-drawer-button');
 
 //state
 let words = [];
