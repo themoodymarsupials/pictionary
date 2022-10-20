@@ -4,6 +4,7 @@
     gap: 10px;
     max-width: 90rem;
     margin: auto;
+    width: 600px;
 }
 
 .game-summary {
@@ -49,7 +50,7 @@ button {
 #add-guess-section {
     display: grid;
     grid-template-rows: 1fr 200px;
-    max-width: 750px;
+    max-width: 600px;
 }
 
 #canvas-options {
@@ -66,4 +67,5 @@ button {
 
 .correct-answer {
     color: green;
+    font-size: xx-large;
 }
