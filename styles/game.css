@@ -105,5 +105,5 @@ button {
 .canvas-and-controls {
     height: min-content;
     display: grid;
-    justify-content: center;
+    justify-content: left;
 }
