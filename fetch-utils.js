@@ -92,8 +92,8 @@ export async function getPaths(gameId) {
     return await client.from('drawings').select('path').eq('room', gameId);
 }
 
-export function onPath(handlePath) {
-    client.from(`drawings`).on('*', handlePath).subscribe();
+export function onPath(gameId, handlePath) {
+    client.from(`games:game_id=eq.${gameId}`).on('*', handlePath).subscribe();
 }
 
 export async function clearCanvas(gameId) {

@@ -53,7 +53,7 @@ window.addEventListener('load', async () => {
         displayPaths();
     }
 
-    onPath(async (payload) => {
+    onPath(game.id, async (payload) => {
         // Get path from database
         const updateResponse = payload.new;
         // Update Response is a new path
