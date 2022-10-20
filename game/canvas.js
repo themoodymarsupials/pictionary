@@ -55,15 +55,20 @@ window.addEventListener('load', async () => {
 
     onPath(game.id, async (payload) => {
         // Get path from database
-        const updateResponse = payload.new;
-        // Update Response is a new path
-        if (updateResponse.room === game.id) {
-            paths.push(updateResponse.path);
-        } else {
-            paths = [];
+        if (payload.eventType === 'INSERT') {
+            // Check we're in the right room
+            if (payload.new.room === game.id) {
+                // Insert paths into destination canvas
+                paths.push(payload.new.path);
+            }
+        } else if (payload.eventType === 'DELETE') {
+            // Check we're in the right room
+            if (payload.old.room === game.id) {
+                // Clear paths / canvas
+                paths = [];
+            }
         }
 
-        // Insert paths into destination canvas
         displayPaths();
     });
     updateBrush();

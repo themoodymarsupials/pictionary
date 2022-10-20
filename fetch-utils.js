@@ -93,11 +93,12 @@ export async function getPaths(gameId) {
 }
 
 export function onPath(gameId, handlePath) {
-    client.from(`games:game_id=eq.${gameId}`).on('*', handlePath).subscribe();
+    client.from(`drawings:room=eq.${gameId}`).on('*', handlePath).subscribe();
 }
 
 export async function clearCanvas(gameId) {
     return await client.from('drawings').delete().eq('room', gameId);
+    // return await client.from(`drawings:room=eq.${gameId}`).delete();
 }
 
 export async function updateGame({ id, game_in_progress, start_time, word }) {
