@@ -224,7 +224,11 @@ function timerTick() {
 //display functions
 function displayGame() {
     gameTitle.textContent = game.title;
-    gameImage.src = game.image_url;
+    if (game.image_url) {
+        gameImage.src = game.image_url;
+    } else {
+        gameImage.src = '/assets/game-placeholder.png';
+    }
 }
 function displayTime() {
     timer.textContent = `${timeObj.timeLeft} seconds`;
