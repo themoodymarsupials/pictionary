@@ -64,6 +64,11 @@ window.addEventListener('load', async () => {
     const guessesGetResponse = await getGuesses(gameId);
     handleResponse(guessesGetResponse, 'guessesGet');
 
+    // IF game is stopped -> set all users to guessers
+    if (game.game_in_progress === false) {
+        userProfile.is_drawer = false;
+    }
+
     // If NO game -> exit
     if (!game) {
         location.replace('/');
@@ -73,6 +78,7 @@ window.addEventListener('load', async () => {
         displayGame();
         displayGuesses();
         displayWord();
+        checkDrawer();
     }
 
     // execute on all game updates
@@ -111,7 +117,6 @@ startGameButton.addEventListener('click', async () => {
 });
 
 claimDrawerButton.addEventListener('click', async () => {
-    console.log(userProfile);
     userProfile.is_drawer = true;
     const profileUpdateResponse = await updateProfile(userProfile);
     handleResponse(profileUpdateResponse, 'updateProfile');
@@ -119,9 +124,12 @@ claimDrawerButton.addEventListener('click', async () => {
 
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (checkDrawer()) {
+        gameInfo.textContent = 'You are a Drawer!';
+        return;
+    }
     const formData = new FormData(addGuessForm);
     guessCur = formData.get('guess').toLowerCase();
-    console.log(guessCur, game.id);
     const guessInsert = {
         guess: guessCur,
         game_id: game.id,
@@ -142,7 +150,6 @@ function checkGuess() {
 }
 
 function checkDrawer() {
-    console.log(userProfile);
     if (userProfile.is_drawer) {
         randomWord.classList.remove('hidden');
         return true;
@@ -175,6 +182,7 @@ function handleResponse(response, type) {
 
 /* Utility Functions */
 function stopGame() {
+    userProfile.is_drawer = false;
     timeObj.timeLeft = 0;
     game.game_in_progress = false;
     startGameButton.disabled = false;
@@ -195,11 +203,12 @@ function resetTimer() {
 
 function configureTimer() {
     // more "short-circuit evaluations"
+    console.log('game.game_in_progress', game.game_in_progress);
     if (game.game_in_progress) {
         // If no current timer -> start timerTick
-        !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
-        // If no endTime -> calculate
         !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
+        // If no endTime -> calculate
+        !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
     }
 }
 
