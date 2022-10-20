@@ -28,7 +28,7 @@ window.addEventListener('load', async () => {
 /* Display Functions */
 async function displayProfiles() {
     for (const profile of profiles) {
-        const profileEl = renderProfile(profile, profile.user_id);
+        const profileEl = renderProfile(profile, profile.id);
         profileList.append(profileEl);
     }
 }

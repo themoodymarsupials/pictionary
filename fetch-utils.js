@@ -122,8 +122,8 @@ export async function updateProfile(profile) {
     return await client.from('profiles').upsert(profile).single();
 }
 
-export async function getProfile(user_id) {
-    const response = await client.from('profiles').select().match({ user_id }).maybeSingle();
+export async function getProfile(id) {
+    const response = await client.from('profiles').select().match({ id }).maybeSingle();
     return response;
 }
 
