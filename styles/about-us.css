@@ -37,3 +37,11 @@ img {
     display: grid;
     justify-items: center;
 }
+
+#credits {
+    background-color: rgb(240, 240, 240);
+    margin-top: 300px;
+    font-size: 0.8em;
+    text-align: center;
+    border-radius: 25px;
+}

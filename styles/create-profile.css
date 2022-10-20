@@ -2,6 +2,7 @@
     display: grid;
     background-color: rgb(235, 235, 235);
     min-width: 500px;
+    max-width: 580px;
     min-height: 550px;
     justify-items: center;
     margin: auto 100px;
@@ -10,7 +11,7 @@
 }
 
 label {
-    width: 400px;
+    width: 500px;
 }
 
 button {

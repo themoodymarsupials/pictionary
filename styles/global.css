@@ -74,6 +74,7 @@ header {
     width: 230px;
     display: grid;
     /* border-radius: 25px; */
+    height: 125px;
 }
 
 .page-header {
