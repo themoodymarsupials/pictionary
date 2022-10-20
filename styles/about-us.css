@@ -1,0 +1,39 @@
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    justify-content: center;
+    grid-auto-rows: auto;
+    gap: 25px;
+    margin: auto 40px;
+}
+
+.about-title {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+img {
+    width: 300px;
+    height: 300px;
+    margin: 20px;
+    border-radius: 25%;
+    display: grid;
+    justify-items: center;
+}
+
+.card {
+    background-color: rgb(240, 240, 240);
+    display: grid;
+    justify-content: center;
+    width: auto;
+    max-width: 400px;
+}
+
+.creator-title {
+    font-size: x-small;
+}
+.container {
+    font-size: smaller;
+    display: grid;
+    justify-items: center;
+}

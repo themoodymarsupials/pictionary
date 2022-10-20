@@ -8,6 +8,7 @@
 
         <!-- title and favicon -->
         <title>Pictionary</title>
+
         <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
 
         <!-- js -->
@@ -15,7 +16,7 @@
             defer
             src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
         ></script>
-        <script type="module" src="app.js"></script>
+        <script type="module" src="leaderboard.js"></script>
 
         <!-- fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,26 +25,24 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&family=Titillium+Web:wght@200;400;600&display=swap"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
             rel="stylesheet"
         />
 
         <!-- css -->
-        <link rel="stylesheet" href="/styles/reset.css" />
-        <link rel="stylesheet" href="/styles/global.css" />
-        <link rel="stylesheet" href="/styles/nav.css" />
+        <link rel="stylesheet" href="../styles/reset.css" />
+        <link rel="stylesheet" href="../styles/global.css" />
         <!-- add link for page specific css -->
-        <link rel="stylesheet" href="/styles/home.css" />
-        <link rel="stylesheet" href="/styles/nav.css" />
+        <link rel="stylesheet" href="../styles/leaderboard.css" />
+        <link rel="stylesheet" href="../styles/nav.css" />
+        <!-- NES CSS theme -->
         <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
     </head>
 
     <body>
         <header class="page-header">
-            <img src="/assets/logo.png" id="logo-image" />
+            <p class="title"></p>
         </header>
         <nav>
             <div id="menu">
@@ -52,34 +51,17 @@
                 <span></span>
                 <span></span>
                 <ul id="menu-list">
-                    <a href="/add-game"><li>Create Game Room</li></a>
-                    <a href="/about-us"><li>About</li></a>
-                    <a href="/create-profile"><li>Update Profile</li></a>
-                    <a href="/leaderboard"><li>Leaderboard</li></a>
+                    <a href="../"><li>Game Rooms</li></a>
+                    <a href="../add-game"><li>Create Game Room</li></a>
+                    <a href="../create-profile"><li>Update Profile</li></a>
+                    <a href="../about-us"><li>About</li></a>
                     <a href="../auth" id="sign-out-link"><li>Log out</li></a>
                 </ul>
             </div>
         </nav>
+
         <main>
-            <ul id="game-list">
-                <li>
-                    <h2>Karl's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Rio's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Erik's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Dylan's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-            </ul>
+            <ul id="profile-list"></ul>
         </main>
     </body>
-    <footer></footer>
 </html>

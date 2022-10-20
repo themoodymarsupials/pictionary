@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- metadata -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+        <!-- title and favicon -->
+        <title>Pictionary</title>
+
+        <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
+
+        <!-- js -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
+        ></script>
+        <script defer src="https://unpkg.com/fabric/dist/fabric.min.js"></script>
+        <script type="module" src="canvas.js"></script>
+        <script type="module" src="game.js"></script>
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&family=Titillium+Web:wght@200;400;600&display=swap"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- css -->
+        <link rel="stylesheet" href="/styles/reset.css" />
+        <link rel="stylesheet" href="/styles/global.css" />
+        <!-- add link for page specific css -->
+        <link rel="stylesheet" href="/styles/game.css" />
+        <link rel="stylesheet" href="/styles/nav.css" />
+        <link rel="stylesheet" href="/styles/canvas.css" />
+        <!-- NES CSS theme -->
+        <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <header class="page-header">
+            <img src="/assets/logo.png" id="logo-image" />
+        </header>
+
+        <nav>
+            <div id="menu">
+                <input type="checkbox" />
+                <span></span>
+                <span></span>
+                <span></span>
+                <ul id="menu-list">
+                    <a href="../"><li>Game Rooms</li></a>
+                    <a href="../about-us"><li>About</li></a>
+                    <a href="../auth" id="sign-out-link"><li>Log out</li></a>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="game-main">
+            <h2 class="header-title">
+                <img src="../assets/pencil.png" id="pencil-image" /> Let's play!
+                <img src="../assets/pencil.png" id="pencil-image-two" />
+            </h2>
+
+            <section id="game-view" class="game-summary nes-input">
+                <p id="game-title">Post</p>
+                <img id="game-image" src="../assets/game-placeholder.png" />
+            </section>
+
+            <section id="generate-word-section" class="nes-input">
+                <h3>Click below to generate a word to draw!</h3>
+                <button id="start-game" class="nes-btn">Start Game</button>
+                <p id="random-word" class="hidden"></p>
+                <button class="nes-btn" id="claim-drawer-button">Claim Drawer</button>
+            </section>
+
+            <section id="canvas-options" class="game-summary canvas-options nes-input">
+                <span id="timer"></span>
+                <input type="color" name="color" id="color-selector" class="nes-input" />
+                <button type="button" id="draw-mode" class="nes-btn is-primary">
+                    <img src="../assets/pencil (1).png" class="draw-mode-icon" />
+                </button>
+                <button type="button" id="erase-mode" class="nes-btn is-warning">
+                    <img src="../assets/eraser.png" class="draw-mode-icon" />
+                </button>
+                <button id="clear-canvas" class="nes-btn">Reset</button>
+            </section>
+
+            <section id="canvas-section" class="nes-container">
+                <canvas id="canvas-src"></canvas>
+            </section>
+
+            <section #add-guess-section>
+                <p id="game-info"></p>
+                <div>
+                    <form id="add-guess-form">
+                        <input name="guess" placeholder="Add your guess here..." required />
+                        <button>Guess</button>
+                    </form>
+                    <ul id="guess-list"></ul>
+                </div>
+            </section>
+        </main>
+        <p id="error-display"></p>
+    </body>
+    <footer>
+        <a href="https://www.flaticon.com/free-icons/pencil" title="pencil icons"
+            >Pencil icons created by Freepik - Flaticon</a
+        >
+    </footer>
+</html>

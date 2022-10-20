@@ -1,0 +1,26 @@
+#game-list li {
+    background: rgb(241, 241, 241);
+    height: 200px;
+    width: 350px;
+}
+
+#game-list li img {
+    height: 100px;
+    object-fit: contain;
+}
+
+#game-list li h2 {
+    font-size: 1em;
+}
+
+#game-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+#game-list a {
+    text-decoration: none;
+    color: initial;
+}

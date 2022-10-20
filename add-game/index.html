@@ -8,6 +8,7 @@
 
         <!-- title and favicon -->
         <title>Pictionary</title>
+
         <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
 
         <!-- js -->
@@ -15,7 +16,7 @@
             defer
             src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"
         ></script>
-        <script type="module" src="app.js"></script>
+        <script type="module" src="add-game.js"></script>
 
         <!-- fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,10 +35,11 @@
         <!-- css -->
         <link rel="stylesheet" href="/styles/reset.css" />
         <link rel="stylesheet" href="/styles/global.css" />
-        <link rel="stylesheet" href="/styles/nav.css" />
         <!-- add link for page specific css -->
-        <link rel="stylesheet" href="/styles/home.css" />
+        <link rel="stylesheet" href="/styles/add-game.css" />
         <link rel="stylesheet" href="/styles/nav.css" />
+
+        <!-- NES CSS theme -->
         <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
     </head>
 
@@ -45,6 +47,7 @@
         <header class="page-header">
             <img src="/assets/logo.png" id="logo-image" />
         </header>
+
         <nav>
             <div id="menu">
                 <input type="checkbox" />
@@ -52,34 +55,47 @@
                 <span></span>
                 <span></span>
                 <ul id="menu-list">
-                    <a href="/add-game"><li>Create Game Room</li></a>
-                    <a href="/about-us"><li>About</li></a>
-                    <a href="/create-profile"><li>Update Profile</li></a>
-                    <a href="/leaderboard"><li>Leaderboard</li></a>
+                    <a href="../"><li>Game Rooms</li></a>
+                    <a href="../leaderboard"><li>Leaderboard</li></a>
+                    <a href="../about-us"><li>About</li></a>
                     <a href="../auth" id="sign-out-link"><li>Log out</li></a>
                 </ul>
             </div>
         </nav>
         <main>
-            <ul id="game-list">
-                <li>
-                    <h2>Karl's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Rio's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Erik's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-                <li>
-                    <h2>Dylan's Pictionary Game</h2>
-                    <img src="/assets/game-placeholder.png" />
-                </li>
-            </ul>
+            <h2 class="header-title">
+                <img src="../assets/pencil.png" id="pencil-image" /> Create a game!
+                <img src="../assets/pencil.png" id="pencil-image-two" />
+            </h2>
+            <div id="form-div">
+                <form id="add-game-form" class="nes-container is-rounded">
+                    <label>
+                        Title
+                        <input name="title" id="title-input" class="nes-input is-error" />
+                    </label>
+                    <label id="add-image-section">
+                        Add an image for your game!
+                        <input
+                            type="file"
+                            name="image"
+                            id="image-input"
+                            class="nes-input is-error"
+                        />
+                        <img
+                            src="../assets/game-placeholder.png"
+                            id="form-image"
+                            class="displayed"
+                        />
+                    </label>
+                    <button id="add-game-button" class="nes-btn">Create</button>
+                </form>
+            </div>
+            <p id="error-display"></p>
         </main>
     </body>
-    <footer></footer>
+    <footer>
+        <a href="https://www.flaticon.com/free-icons/pencil" id="flaticon" title="pencil icons"
+            >Pencil icons created by Freepik - Flaticon</a
+        >
+    </footer>
 </html>

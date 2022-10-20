@@ -1,0 +1,52 @@
+#add-game-form {
+    background: rgb(237, 236, 235);
+    display: grid;
+    width: 600px;
+    min-height: 600px;
+}
+
+#form-div {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    margin-top: auto;
+}
+
+#form-image {
+    width: 300px;
+    padding: 10px;
+    image-rendering: pixelated;
+}
+
+#form-image.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    display: grid;
+    padding-bottom: 20x;
+    text-align: left;
+    width: 400px;
+    padding-top: 20px;
+    background: white;
+}
+
+#title-input {
+    width: 544px;
+}
+
+form button {
+    height: 45px;
+    width: 200px;
+    background: rgb(178, 178, 203);
+    font-weight: bold;
+    color: white;
+}
+
+#flaticon {
+    text-decoration: none;
+    color: initial;
+    font-size: 0.3em;
+}
