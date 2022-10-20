@@ -24,6 +24,7 @@ const addGuessForm = document.getElementById('add-guess-form');
 const guessList = document.getElementById('guess-list');
 const timer = document.getElementById('timer');
 const randomWord = document.getElementById('random-word');
+const gameInfo = document.getElementById('game-info');
 const startGameButton = document.getElementById('start-game');
 const claimDrawerButton = document.getElementById('claim-drawer-button');
 
@@ -49,6 +50,8 @@ startGameButton.addEventListener('click', async () => {
     }
 
     // Update Game + Set timer
+    gameInfo.textContent = 'The game has started!';
+
     checkDrawer();
     resetCanvas();
     game.game_in_progress = true;
@@ -130,7 +133,8 @@ addGuessForm.addEventListener('submit', async (e) => {
 
 function checkGuess() {
     if (game.word === guessCur) {
-        console.log(game.word, guessCur);
+        stopGame();
+        gameInfo.textContent = 'You are awesome! ...also the game is over!';
         return true;
     } else {
         return false;
@@ -169,6 +173,16 @@ function handleResponse(response, type) {
 }
 
 /* Utility Functions */
+function stopGame() {
+    timeObj.timeLeft = 0;
+    game.game_in_progress = false;
+    startGameButton.disabled = false;
+    game.game_state = 'results';
+    clearInterval(timeObj.Timer);
+    resetTimer();
+    updateGame(game);
+}
+
 function resetTimer() {
     timeObj = {
         lengthOfGame: 60000,
@@ -201,12 +215,7 @@ function timerTick() {
         timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
         // if time is up ->
         if (timeObj.timeLeft < 0) {
-            timeObj.timeLeft = 0;
-            game.game_in_progress = false;
-            startGameButton.disabled = false;
-            clearInterval(timeObj.Timer);
-            resetTimer();
-            updateGame(game);
+            stopGame();
         }
     }
     displayTime();
