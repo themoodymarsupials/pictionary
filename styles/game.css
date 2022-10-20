@@ -22,7 +22,7 @@ main {
 }
 
 #game-image {
-    width: 100px;
+    width: 200px;
     height: 100%;
     object-fit: contain;
     padding-top: 25px;
