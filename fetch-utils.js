@@ -92,12 +92,13 @@ export async function getPaths(gameId) {
     return await client.from('drawings').select('path').eq('room', gameId);
 }
 
-export function onPath(handlePath) {
-    client.from(`drawings`).on('*', handlePath).subscribe();
+export function onPath(gameId, handlePath) {
+    client.from(`drawings:room=eq.${gameId}`).on('*', handlePath).subscribe();
 }
 
 export async function clearCanvas(gameId) {
     return await client.from('drawings').delete().eq('room', gameId);
+    // return await client.from(`drawings:room=eq.${gameId}`).delete();
 }
 
 export async function updateGame({ id, game_in_progress, start_time, word }) {
@@ -113,7 +114,7 @@ export async function getWords() {
 }
 
 export function onGameUpdate(gameId, handleUpdate) {
-    client.from(`games`).on('UPDATE', handleUpdate).subscribe();
+    client.from(`games:id=eq.${gameId}`).on('UPDATE', handleUpdate).subscribe();
 }
 
 /* User Profiles */
@@ -122,8 +123,8 @@ export async function updateProfile(profile) {
     return await client.from('profiles').upsert(profile).single();
 }
 
-export async function getProfile(user_id) {
-    const response = await client.from('profiles').select().match({ user_id }).maybeSingle();
+export async function getProfile(id) {
+    const response = await client.from('profiles').select().match({ id }).maybeSingle();
     return response;
 }
 

@@ -18,7 +18,7 @@ window.addEventListener('load', async () => {
     profiles = response.data;
 
     if (error) {
-        console.log(error);
+        alert(error);
     }
     if (profiles) {
         displayProfiles();
@@ -28,7 +28,7 @@ window.addEventListener('load', async () => {
 /* Display Functions */
 async function displayProfiles() {
     for (const profile of profiles) {
-        const profileEl = renderProfile(profile, profile.user_id);
+        const profileEl = renderProfile(profile, profile.id);
         profileList.append(profileEl);
     }
 }

@@ -53,7 +53,8 @@
                 <ul id="menu-list">
                     <a href="../"><li>Game Rooms</li></a>
                     <a href="../add-game"><li>Create Game Room</li></a>
-                    <a href="../leaderboard"><li>Leaderboard</li></a>
+                    <a href="../about-us"><li>About</li></a>
+                    <!-- <a href="../leaderboard"><li>Leaderboard</li></a> -->
                     <a href="../auth" id="sign-out-link"><li>Log out</li></a>
                 </ul>
             </div>
@@ -64,14 +65,14 @@
                 <img src="../assets/pencil.png" id="pencil-image" /> Edit Your Profile
                 <img src="../assets/pencil.png" id="pencil-image-two" />
             </h2>
-            <form id="profile-form" class="nes-container">
+            <form id="profile-form" class="nes-input">
                 <label>
                     <div>Username</div>
                     <input
                         name="username"
                         required
                         placeholder="choose a username..."
-                        class="nes-input"
+                        class="nes-input is-error"
                     />
                 </label>
 
@@ -81,7 +82,7 @@
                         name="pronouns"
                         required
                         placeholder="pronouns"
-                        class="nes-textarea"
+                        class="nes-textarea is-error"
                     ></textarea>
                 </label>
 

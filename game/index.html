@@ -57,6 +57,7 @@
                 <ul id="menu-list">
                     <a href="../"><li>Game Rooms</li></a>
                     <a href="../about-us"><li>About</li></a>
+                    <a href="../create-profile"><li>Update Profile</li></a>
                     <a href="../auth" id="sign-out-link"><li>Log out</li></a>
                 </ul>
             </div>
@@ -74,10 +75,13 @@
             </section>
 
             <section id="generate-word-section" class="nes-input">
-                <h3>Click below to generate a word to draw!</h3>
-                <button id="start-game" class="nes-btn">Start Game</button>
+                <h3 class="game-info" id="game-info">
+                    Click below to start a game and generate a word!
+                </h3>
+                <div id="game-buttons">
+                    <button id="start-game" class="nes-btn">Start Game</button>
+                </div>
                 <p id="random-word" class="hidden"></p>
-                <button class="nes-btn" id="claim-drawer-button">Claim Drawer</button>
             </section>
 
             <section id="canvas-options" class="game-summary canvas-options nes-input">
@@ -97,7 +101,6 @@
             </section>
 
             <section #add-guess-section>
-                <p id="game-info"></p>
                 <div>
                     <form id="add-guess-form">
                         <input name="guess" placeholder="Add your guess here..." required />

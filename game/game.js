@@ -26,7 +26,6 @@ const timer = document.getElementById('timer');
 const randomWord = document.getElementById('random-word');
 const gameInfo = document.getElementById('game-info');
 const startGameButton = document.getElementById('start-game');
-const claimDrawerButton = document.getElementById('claim-drawer-button');
 
 //state
 let words = [];
@@ -42,39 +41,7 @@ let userProfile = null;
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
 
 //events
-startGameButton.addEventListener('click', async () => {
-    // if game is in progress -> deactivate button
-    if (game.game_in_progress === true) {
-        startGameButton.disabled = true;
-        return;
-    }
-
-    // Update Game + Set timer
-    gameInfo.textContent = 'The game has started!';
-
-    checkDrawer();
-    resetCanvas();
-    game.game_in_progress = true;
-    game.word = generateWord();
-    game.start_time = Date.now();
-    timeObj.endTime = game.start_time + timeObj.lengthOfGame;
-    updateGame(game);
-});
-
-claimDrawerButton.addEventListener('click', async () => {
-    userProfile.is_drawer = true;
-    const profileUpdateResponse = updateProfile(userProfile);
-    handleResponse(profileUpdateResponse, 'updateProfile');
-});
-
 window.addEventListener('load', async () => {
-    //get User and profile
-    const userResponse = await getUser();
-    handleResponse(userResponse, 'userId');
-
-    const userProfileResponse = await getProfile(userId);
-    handleResponse(userProfileResponse, 'userProfile');
-
     // get gameID
     const searchParams = new URLSearchParams(location.search);
     const gameId = searchParams.get('id');
@@ -82,14 +49,24 @@ window.addEventListener('load', async () => {
         location.replace('/');
         return;
     }
+    //get User and profile
+    const userResponse = await getUser();
+    handleResponse(userResponse, 'userId');
+    const userProfileResponse = await getProfile(userId);
+    handleResponse(userProfileResponse, 'userProfile');
 
-    // Get game and word from database
+    // Get game/word/guesses from database
     const gameResponse = await getGame(gameId);
     handleResponse(gameResponse, 'game');
     const wordsResponse = await getWords();
     handleResponse(wordsResponse, 'words');
     const guessesGetResponse = await getGuesses(gameId);
     handleResponse(guessesGetResponse, 'guessesGet');
+
+    // IF game is stopped -> set all users to guessers
+    if (game.game_in_progress === false) {
+        userProfile.is_drawer = false;
+    }
 
     // If NO game -> exit
     if (!game) {
@@ -100,14 +77,8 @@ window.addEventListener('load', async () => {
         displayGame();
         displayGuesses();
         displayWord();
+        checkDrawer();
     }
-
-    onGuess(game.id, async (payload) => {
-        const guessId = payload.new.id;
-        const guessGetResponse = await getGuess(guessId);
-        handleResponse(guessGetResponse, 'guessGet');
-        displayGuesses();
-    });
 
     // execute on all game updates
     onGameUpdate(game.id, async (payload) => {
@@ -115,15 +86,47 @@ window.addEventListener('load', async () => {
         configureTimer();
         displayWord();
     });
+
+    onGuess(game.id, async (payload) => {
+        const guessId = payload.new.id;
+        const guessGetResponse = await getGuess(guessId);
+        handleResponse(guessGetResponse, 'guessGet');
+        displayGuesses();
+    });
+});
+
+startGameButton.addEventListener('click', async () => {
+    // if game is in progress -> deactivate button
+    if (game.game_in_progress === true) {
+        startGameButton.disabled = true;
+        return;
+    }
+
+    // Update Game + Set timer
+    gameInfo.textContent = 'The game has started!';
+    userProfile.is_drawer = true;
+    const profileUpdateResponse = await updateProfile(userProfile);
+    handleResponse(profileUpdateResponse, 'updateProfile');
+
+    checkDrawer();
+    resetCanvas();
+    game.game_in_progress = true;
+    game.word = generateWord().toLowerCase();
+    game.start_time = Date.now();
+    timeObj.endTime = game.start_time + timeObj.lengthOfGame;
+    updateGame(game);
 });
 
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (checkDrawer()) {
+        gameInfo.textContent = 'You are the Drawer!';
+        return;
+    }
     const formData = new FormData(addGuessForm);
-    guessCur = formData.get('guess');
-
+    guessCur = formData.get('guess').toLowerCase();
     const guessInsert = {
-        guess: formData.get('guess'),
+        guess: guessCur,
         game_id: game.id,
         is_correct: checkGuess(),
     };
@@ -174,6 +177,7 @@ function handleResponse(response, type) {
 
 /* Utility Functions */
 function stopGame() {
+    userProfile.is_drawer = false;
     timeObj.timeLeft = 0;
     game.game_in_progress = false;
     startGameButton.disabled = false;
@@ -181,6 +185,7 @@ function stopGame() {
     clearInterval(timeObj.Timer);
     resetTimer();
     updateGame(game);
+    updateProfile(userProfile);
 }
 
 function resetTimer() {
@@ -195,10 +200,16 @@ function resetTimer() {
 function configureTimer() {
     // more "short-circuit evaluations"
     if (game.game_in_progress) {
-        // If no current timer -> start timerTick
-        !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
         // If no endTime -> calculate
-        !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
+        if (!timeObj.endTime) {
+            timeObj.endTime = game.start_time + timeObj.lengthOfGame;
+        }
+        // If no current timer -> start timerTick
+        if (!timeObj.Timer) {
+            timeObj.Timer = setInterval(timerTick, 1000);
+        }
+        // !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
+        // !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
     }
 }
 
@@ -210,6 +221,7 @@ function generateWord() {
 
 // Executes every 1 second ~ called by setInterval(timerTick, 1000)
 function timerTick() {
+    // debugger;
     if (game.game_in_progress) {
         // decrement timeLeft by 1 second
         timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
@@ -224,7 +236,11 @@ function timerTick() {
 //display functions
 function displayGame() {
     gameTitle.textContent = game.title;
-    gameImage.src = game.image_url;
+    if (game.image_url) {
+        gameImage.src = game.image_url;
+    } else {
+        gameImage.src = '/assets/game-placeholder.png';
+    }
 }
 function displayTime() {
     timer.textContent = `${timeObj.timeLeft} seconds`;
