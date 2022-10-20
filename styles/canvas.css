@@ -1,7 +1,7 @@
 .canvas-options {
     display: grid;
     grid-template-columns: repeat(4, auto);
-    grid-template-rows: 4rem auto;
+    grid-template-rows: 2rem auto;
     justify-content: center;
     align-items: center;
     justify-items: center;
@@ -36,9 +36,4 @@
     height: min-content;
     width: min-content;
     padding: 0;
-}
-
-.canvas-container {
-    /* grid-column: 1 / -1; */
-    border: 1px solid #999;
 }

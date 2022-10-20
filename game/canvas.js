@@ -4,9 +4,8 @@ import { addPath, clearCanvas, getPaths, onPath, getGame } from '../fetch-utils.
 
 /* Get DOM Elements */
 const canvasSrc = new fabric.Canvas('canvas-src', {
-    width: '500',
-    height: '500',
-    isDrawingMode: true,
+    width: '550',
+    height: '550',
 });
 
 const clearCanvasButton = document.getElementById('clear-canvas');
@@ -73,6 +72,14 @@ window.addEventListener('load', async () => {
     });
     updateBrush();
 });
+
+export function disableDrawingMode(bool) {
+    if (bool) {
+        canvasSrc.isDrawingMode = false;
+    } else {
+        canvasSrc.isDrawingMode = true;
+    }
+}
 
 clearCanvasButton.addEventListener('click', resetCanvas);
 

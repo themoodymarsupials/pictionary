@@ -14,7 +14,7 @@ import {
     updateProfile,
 } from '../fetch-utils.js';
 import { renderGuess } from '../render-utils.js';
-import { resetCanvas } from './canvas.js';
+import { disableDrawingMode, resetCanvas } from './canvas.js';
 
 //DOM
 const errorDisplay = document.getElementById('error-display');
@@ -66,6 +66,7 @@ window.addEventListener('load', async () => {
     // IF game is stopped -> set all users to guessers
     if (game.game_in_progress === false) {
         userProfile.is_drawer = false;
+        disableDrawingMode(true);
     }
 
     // If NO game -> exit
@@ -83,6 +84,9 @@ window.addEventListener('load', async () => {
     // execute on all game updates
     onGameUpdate(game.id, async (payload) => {
         game = payload.new;
+        if (game.game_in_progress === false) {
+            gameInfo.textContent = 'Game is over';
+        }
         configureTimer();
         displayWord();
     });
@@ -105,6 +109,7 @@ startGameButton.addEventListener('click', async () => {
     // Update Game + Set timer
     gameInfo.textContent = 'The game has started!';
     userProfile.is_drawer = true;
+    disableDrawingMode(false);
     const profileUpdateResponse = await updateProfile(userProfile);
     handleResponse(profileUpdateResponse, 'updateProfile');
 
@@ -147,6 +152,7 @@ function checkGuess() {
 function checkDrawer() {
     if (userProfile.is_drawer) {
         randomWord.classList.remove('hidden');
+        disableDrawingMode(false);
         return true;
     } else {
         return false;
@@ -176,7 +182,7 @@ function handleResponse(response, type) {
 }
 
 /* Utility Functions */
-function stopGame() {
+async function stopGame() {
     userProfile.is_drawer = false;
     timeObj.timeLeft = 0;
     game.game_in_progress = false;
