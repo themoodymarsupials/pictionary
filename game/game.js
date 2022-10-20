@@ -42,31 +42,6 @@ let userProfile = null;
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
 
 //events
-startGameButton.addEventListener('click', async () => {
-    // if game is in progress -> deactivate button
-    if (game.game_in_progress === true) {
-        startGameButton.disabled = true;
-        return;
-    }
-
-    // Update Game + Set timer
-    gameInfo.textContent = 'The game has started!';
-
-    checkDrawer();
-    resetCanvas();
-    game.game_in_progress = true;
-    game.word = generateWord().toLowerCase();
-    game.start_time = Date.now();
-    timeObj.endTime = game.start_time + timeObj.lengthOfGame;
-    updateGame(game);
-});
-
-claimDrawerButton.addEventListener('click', async () => {
-    userProfile.is_drawer = true;
-    const profileUpdateResponse = updateProfile(userProfile);
-    handleResponse(profileUpdateResponse, 'updateProfile');
-});
-
 window.addEventListener('load', async () => {
     // get gameID
     const searchParams = new URLSearchParams(location.search);
@@ -116,6 +91,32 @@ window.addEventListener('load', async () => {
     });
 });
 
+startGameButton.addEventListener('click', async () => {
+    // if game is in progress -> deactivate button
+    if (game.game_in_progress === true) {
+        startGameButton.disabled = true;
+        return;
+    }
+
+    // Update Game + Set timer
+    gameInfo.textContent = 'The game has started!';
+
+    checkDrawer();
+    resetCanvas();
+    game.game_in_progress = true;
+    game.word = generateWord().toLowerCase();
+    game.start_time = Date.now();
+    timeObj.endTime = game.start_time + timeObj.lengthOfGame;
+    updateGame(game);
+});
+
+claimDrawerButton.addEventListener('click', async () => {
+    console.log(userProfile);
+    userProfile.is_drawer = true;
+    const profileUpdateResponse = await updateProfile(userProfile);
+    handleResponse(profileUpdateResponse, 'updateProfile');
+});
+
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(addGuessForm);
@@ -141,6 +142,7 @@ function checkGuess() {
 }
 
 function checkDrawer() {
+    console.log(userProfile);
     if (userProfile.is_drawer) {
         randomWord.classList.remove('hidden');
         return true;
