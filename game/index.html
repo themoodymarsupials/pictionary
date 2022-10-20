@@ -9,7 +9,7 @@
         <!-- title and favicon -->
         <title>Pictionary</title>
 
-        <link rel="icon" type="image/x-icon" href="/assets/alchemy-favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
 
         <!-- js -->
         <script
@@ -84,31 +84,33 @@
                 <p id="random-word" class="hidden"></p>
             </section>
 
-            <section id="canvas-options" class="game-summary canvas-options nes-input">
-                <span id="timer"></span>
-                <input type="color" name="color" id="color-selector" class="nes-input" />
-                <button type="button" id="draw-mode" class="nes-btn is-primary">
-                    <img src="../assets/pencil (1).png" class="draw-mode-icon" />
-                </button>
-                <button type="button" id="erase-mode" class="nes-btn is-warning">
-                    <img src="../assets/eraser.png" class="draw-mode-icon" />
-                </button>
-                <button id="clear-canvas" class="nes-btn">Reset</button>
-            </section>
-
-            <section id="canvas-section" class="nes-container">
-                <canvas id="canvas-src"></canvas>
-            </section>
-
-            <section #add-guess-section>
-                <div>
-                    <form id="add-guess-form">
-                        <input name="guess" placeholder="Add your guess here..." required />
-                        <button>Guess</button>
-                    </form>
-                    <ul id="guess-list"></ul>
+            <div class="game-section">
+                <div class="canvas-and-controls">
+                    <section id="canvas-options" class="game-summary canvas-options nes-input">
+                        <span id="timer"></span>
+                        <input type="color" name="color" id="color-selector" class="nes-input" />
+                        <button type="button" id="draw-mode" class="nes-btn is-primary">
+                            <img src="../assets/pencil (1).png" class="draw-mode-icon" />
+                        </button>
+                        <button type="button" id="erase-mode" class="nes-btn is-warning">
+                            <img src="../assets/eraser.png" class="draw-mode-icon" />
+                        </button>
+                        <button id="clear-canvas" class="nes-btn">Reset</button>
+                    </section>
+                    <section id="canvas-section" class="nes-input">
+                        <canvas id="canvas-src"></canvas>
+                    </section>
                 </div>
-            </section>
+                <section #add-guess-section>
+                    <div>
+                        <form id="add-guess-form">
+                            <input name="guess" placeholder="Add your guess here..." required />
+                            <button>Guess</button>
+                        </form>
+                        <ul id="guess-list"></ul>
+                    </div>
+                </section>
+            </div>
         </main>
         <p id="error-display"></p>
     </body>
