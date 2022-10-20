@@ -55,7 +55,7 @@ startGameButton.addEventListener('click', async () => {
     checkDrawer();
     resetCanvas();
     game.game_in_progress = true;
-    game.word = generateWord();
+    game.word = generateWord().toLowerCase();
     game.start_time = Date.now();
     timeObj.endTime = game.start_time + timeObj.lengthOfGame;
     updateGame(game);
@@ -120,10 +120,10 @@ window.addEventListener('load', async () => {
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(addGuessForm);
-    guessCur = formData.get('guess');
+    guessCur = formData.get('guess').toLowerCase();
 
     const guessInsert = {
-        guess: formData.get('guess'),
+        guess: guessCur,
         game_id: game.id,
         is_correct: checkGuess(),
     };
