@@ -90,6 +90,7 @@ window.addEventListener('load', async () => {
         } else {
             gameInfo.textContent = 'The game has started!';
         }
+        resetTimer();
         configureTimer();
         displayWord();
     });
@@ -199,7 +200,6 @@ async function stopGame() {
     clearInterval(timeObj.Timer);
     resetTimer();
     await updateProfile(userProfile);
-    console.log(userProfile.is_drawer, 'line 198');
 }
 
 function resetTimer() {
@@ -262,9 +262,7 @@ function displayTime() {
 function displayWord() {
     if (game.word) {
         randomWord.textContent = game.word;
-        console.log('wtf', userProfile);
     }
-    console.log(userProfile.is_drawer);
     if (userProfile.is_drawer === false) {
         randomWord.classList.add('hidden');
     }
