@@ -86,7 +86,11 @@ window.addEventListener('load', async () => {
         game = payload.new;
         if (game.game_in_progress === false) {
             gameInfo.textContent = 'Game is over';
+            await stopGame();
+        } else {
+            gameInfo.textContent = 'The game has started!';
         }
+        resetTimer();
         configureTimer();
         displayWord();
     });
@@ -133,15 +137,17 @@ addGuessForm.addEventListener('submit', async (e) => {
     const guessInsert = {
         guess: guessCur,
         game_id: game.id,
-        is_correct: checkGuess(),
+        is_correct: game.word === guessCur,
+        // is_correct: checkGuess(),
     };
     const guessCreateResponse = await createGuess(guessInsert);
     handleResponse(guessCreateResponse, 'guessCreate');
+    await checkGuess();
 });
 
-function checkGuess() {
+async function checkGuess() {
     if (game.word === guessCur) {
-        stopGame();
+        await stopGame();
         gameInfo.textContent = 'You are awesome! ...also the game is over!';
         return true;
     } else {
@@ -183,15 +189,17 @@ function handleResponse(response, type) {
 
 /* Utility Functions */
 async function stopGame() {
+    if (game.game_in_progress) {
+        game.game_in_progress = false;
+        game.game_state = 'results';
+        await updateGame(game);
+    }
+    startGameButton.disabled = false;
     userProfile.is_drawer = false;
     timeObj.timeLeft = 0;
-    game.game_in_progress = false;
-    startGameButton.disabled = false;
-    game.game_state = 'results';
     clearInterval(timeObj.Timer);
     resetTimer();
-    updateGame(game);
-    updateProfile(userProfile);
+    await updateProfile(userProfile);
 }
 
 function resetTimer() {
@@ -232,7 +240,7 @@ function timerTick() {
         // decrement timeLeft by 1 second
         timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
         // if time is up ->
-        if (timeObj.timeLeft < 0) {
+        if (timeObj.timeLeft <= 0) {
             stopGame();
         }
     }
@@ -254,6 +262,9 @@ function displayTime() {
 function displayWord() {
     if (game.word) {
         randomWord.textContent = game.word;
+    }
+    if (userProfile.is_drawer === false) {
+        randomWord.classList.add('hidden');
     }
 }
 function displayGuesses() {
