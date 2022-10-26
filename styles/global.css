@@ -8,6 +8,9 @@
     --action-color: rgb(77, 132, 252);
 
     --primary-font: 'Press Start 2P', cursive;
+
+    --canvas-height: 550;
+    --canvas-width: 550;
 }
 
 body {

@@ -64,11 +64,6 @@
         </nav>
 
         <main class="game-main">
-            <h2 class="header-title">
-                <img src="../assets/pencil.png" id="pencil-image" /> Let's play!
-                <img src="../assets/pencil.png" id="pencil-image-two" />
-            </h2>
-
             <section id="game-view" class="game-summary nes-input">
                 <p id="game-title">Post</p>
                 <img id="game-image" src="../assets/game-placeholder.png" />
@@ -87,7 +82,7 @@
             <div class="game-section">
                 <div class="canvas-and-controls">
                     <section id="canvas-options" class="game-summary canvas-options nes-input">
-                        <span id="timer"></span>
+                        <span id="timer"> </span>
                         <input type="color" name="color" id="color-selector" class="nes-input" />
                         <button type="button" id="draw-mode" class="nes-btn is-primary">
                             <img src="../assets/pencil (1).png" class="draw-mode-icon" />
@@ -98,17 +93,17 @@
                         <button id="clear-canvas" class="nes-btn">Reset</button>
                     </section>
                     <section id="canvas-section" class="nes-input">
-                        <canvas id="canvas-src"></canvas>
+                        <canvas id="canvas-src" height="550" width="550"></canvas>
                     </section>
                 </div>
-                <section #add-guess-section>
-                    <div>
-                        <form id="add-guess-form">
-                            <input name="guess" placeholder="Add your guess here..." required />
-                            <button>Guess</button>
-                        </form>
+                <section id="add-guess-section" class="nes-input">
+                    <div id="guess-list-container">
                         <ul id="guess-list"></ul>
                     </div>
+                    <form id="add-guess-form">
+                        <input name="guess" placeholder="Add your guess here..." required />
+                        <button>Guess</button>
+                    </form>
                 </section>
             </div>
         </main>

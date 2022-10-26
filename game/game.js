@@ -275,8 +275,13 @@ function displayGuesses() {
         if (guess.is_correct) {
             guessEl.classList.add('correct-answer');
         }
-        guessList.append(guessEl);
+        guessList.prepend(guessEl);
+        scrollToBottom();
     }
+}
+function scrollToBottom() {
+    const guessListContainer = document.getElementById('guess-list-container');
+    guessListContainer.scrollTop = guessListContainer.scrollHeight;
 }
 function displayError() {
     if (error) {

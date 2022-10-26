@@ -3,9 +3,12 @@
 import { addPath, clearCanvas, getPaths, onPath, getGame } from '../fetch-utils.js';
 
 /* Get DOM Elements */
-const canvasSrc = new fabric.Canvas('canvas-src', {
-    width: '550',
-    height: '550',
+const root = document.querySelector(':root');
+const roootStyle = getComputedStyle(root);
+
+let canvasSrc = new fabric.Canvas('canvas-src', {
+    width: roootStyle.getPropertyValue('--canvas-width'),
+    height: roootStyle.getPropertyValue('--canvas-height'),
 });
 
 const clearCanvasButton = document.getElementById('clear-canvas');
@@ -24,6 +27,18 @@ let drawingColor = '#000000'; // Defaults to black
 let drawingColorCache = drawingColor; // Saves color
 
 /* Events */
+/* 
+window.addEventListener('resize', (event) => {
+    console.log(window.innerWidth);
+    console.log(canvasSrc.width);
+    canvasSrc = new fabric.Canvas('canvas-src', {
+        width: roootStyle.getPropertyValue('--canvas-width'),
+        height: roootStyle.getPropertyValue('--canvas-height'),
+    });
+    console.log(canvasSrc.width);
+}); 
+*/
+
 window.addEventListener('load', async () => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');

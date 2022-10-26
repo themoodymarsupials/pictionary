@@ -1,4 +1,5 @@
 .canvas-options {
+    height: 8rem;
     display: grid;
     grid-template-columns: repeat(4, auto);
     grid-template-rows: 2rem auto;
@@ -12,6 +13,7 @@
 #timer {
     grid-column: 1 /-1;
     grid-row: 1;
+    height: 2rem;
 }
 
 .draw-mode-icon {
