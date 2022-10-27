@@ -176,5 +176,5 @@ function displayPaths() {
 
 function displayError() {
     //eslint ignore next line
-    alert(error);
+    console.log(error);
 }
