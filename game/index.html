@@ -78,8 +78,8 @@
             </section>
 
             <div class="game-section">
-                <div class="canvas-and-controls">
-                    <section id="canvas-options" class="game-summary canvas-options nes-input">
+                <section class="canvas-and-controls disabled" id="canvas-and-controls-section">
+                    <div id="canvas-options" class="game-summary canvas-options nes-input">
                         <p id="random-word"></p>
                         <input
                             type="color"
@@ -102,16 +102,16 @@
                             <img src="../assets/eraser.png" class="draw-mode-icon" />
                         </button>
                         <button id="clear-canvas" class="game-buttons nes-btn">Reset</button>
-                    </section>
+                    </div>
                     <section id="canvas-section" class="nes-input">
                         <canvas id="canvas-src" height="550" width="550"></canvas>
                     </section>
-                </div>
+                </section>
                 <section id="add-guess-section" class="nes-input">
                     <div id="guess-list-container">
                         <ul id="guess-list"></ul>
                     </div>
-                    <form id="add-guess-form">
+                    <form id="add-guess-form" class="disabled darken">
                         <input name="guess" placeholder="Add your guess here..." required />
                         <button>Guess</button>
                     </form>

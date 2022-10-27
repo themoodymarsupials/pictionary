@@ -14,7 +14,7 @@ import {
     updateProfile,
 } from '../fetch-utils.js';
 import { renderGuess } from '../render-utils.js';
-import { disableDrawingMode, resetCanvas } from './canvas.js';
+import { enableDrawingMode, resetCanvas } from './canvas.js';
 
 //DOM
 const errorDisplay = document.getElementById('error-display');
@@ -95,12 +95,6 @@ window.addEventListener('load', async () => {
 });
 
 startGameButton.addEventListener('click', async () => {
-    // check if game is in progress -> deactivate button
-    if (game.game_in_progress === true) {
-        displayStartBtn('stopped');
-        return;
-    }
-
     // Update profile
     userProfile.is_drawer = true;
     const profileUpdateResponse = await updateProfile(userProfile);
@@ -112,9 +106,6 @@ startGameButton.addEventListener('click', async () => {
 
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (userProfile.is_drawer) {
-        return;
-    }
     const formData = new FormData(addGuessForm);
     guessCur = formData.get('guess').toLowerCase();
     const guessInsert = {
@@ -172,16 +163,8 @@ async function startGameReceive() {
         displayError();
         return;
     }
-    if (userProfile.is_drawer) {
-        disableDrawingMode(false);
-        displayWord('drawer');
-        displayGameInfo('in_progress', 'drawer');
-    } else if (!userProfile.is_drawer) {
-        displayWord('guesser');
-        displayGameInfo('in_progress', 'guesser');
-    }
-    displayStartBtn('in_progress');
     configureTimer();
+    updateDisplays();
     resetCanvas();
 }
 
@@ -203,33 +186,39 @@ async function stopGameReceive() {
         displayError();
         return;
     }
-    displayStartBtn('stopped');
     // update profile
     userProfile.is_drawer = false;
     const profileUpdateResponse = await updateProfile(userProfile);
     handleResponse(profileUpdateResponse, 'updateProfile');
-    // update timer
+    updateDisplays();
     configureTimer();
-    displayGameInfo('results');
 }
 
 // Continue a game on page reload
 function continueGame() {
+    updateDisplays();
+    configureTimer();
+}
+
+function updateDisplays() {
     if (game.game_in_progress) {
         displayStartBtn('in_progress');
         if (userProfile.is_drawer) {
-            disableDrawingMode(false);
+            enableDrawingMode(true);
             displayWord('drawer');
             displayGameInfo('in_progress', 'drawer');
+            displayGuessInput('in_progress', 'drawer');
         } else if (!userProfile.is_drawer) {
             displayWord('guesser');
             displayGameInfo('in_progress', 'guesser');
+            displayGuessInput('in_progress', 'guesser');
         }
     } else {
+        enableDrawingMode(false);
         displayGameInfo('results');
         displayStartBtn('stopped');
+        displayGuessInput('stopped');
     }
-    configureTimer();
 }
 
 /* Timer Functions */
@@ -362,6 +351,18 @@ function displayGuesses() {
         }
         guessList.prepend(guessEl);
         scrollToBottomOfGuesses();
+    }
+}
+function displayGuessInput(gameState, role) {
+    if (gameState === 'stopped' || role === 'drawer') {
+        addGuessForm.disabled = true;
+        addGuessForm.classList.add('disabled', 'darken');
+    } else if (gameState === 'in_progress' && role === 'guesser') {
+        addGuessForm.disabled = false;
+        addGuessForm.classList.remove('disabled', 'darken');
+    } else {
+        error.message = 'error in displayGuessInput';
+        displayError();
     }
 }
 function displayError() {

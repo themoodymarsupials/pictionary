@@ -11,6 +11,7 @@ let canvasSrc = new fabric.Canvas('canvas-src', {
     height: roootStyle.getPropertyValue('--canvas-height'),
 });
 
+const canvasAndControlsSection = document.getElementById('canvas-and-controls-section');
 const clearCanvasButton = document.getElementById('clear-canvas');
 const colorSelector = document.getElementById('color-selector');
 const drawModeSelector = document.getElementById('draw-mode');
@@ -88,11 +89,13 @@ window.addEventListener('load', async () => {
     updateBrush();
 });
 
-export function disableDrawingMode(bool) {
-    if (bool) {
-        canvasSrc.isDrawingMode = false;
-    } else {
+export function enableDrawingMode(input) {
+    if (input) {
+        canvasAndControlsSection.classList.remove('disabled');
         canvasSrc.isDrawingMode = true;
+    } else {
+        canvasAndControlsSection.classList.add('disabled');
+        canvasSrc.isDrawingMode = false;
     }
 }
 

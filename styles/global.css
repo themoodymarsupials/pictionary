@@ -60,6 +60,14 @@ main {
     display: none !important;
 }
 
+.disabled {
+    pointer-events: none;
+}
+
+.darken {
+    filter: brightness(0.75);
+}
+
 #pencil-image {
     width: 40px;
     transform: scaleX(-1);
