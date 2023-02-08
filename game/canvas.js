@@ -3,11 +3,15 @@
 import { addPath, clearCanvas, getPaths, onPath, getGame } from '../fetch-utils.js';
 
 /* Get DOM Elements */
-const canvasSrc = new fabric.Canvas('canvas-src', {
-    width: '550',
-    height: '550',
+const root = document.querySelector(':root');
+const roootStyle = getComputedStyle(root);
+
+let canvasSrc = new fabric.Canvas('canvas-src', {
+    width: roootStyle.getPropertyValue('--canvas-width'),
+    height: roootStyle.getPropertyValue('--canvas-height'),
 });
 
+const canvasAndControlsSection = document.getElementById('canvas-and-controls-section');
 const clearCanvasButton = document.getElementById('clear-canvas');
 const colorSelector = document.getElementById('color-selector');
 const drawModeSelector = document.getElementById('draw-mode');
@@ -24,6 +28,18 @@ let drawingColor = '#000000'; // Defaults to black
 let drawingColorCache = drawingColor; // Saves color
 
 /* Events */
+/* 
+window.addEventListener('resize', (event) => {
+    console.log(window.innerWidth);
+    console.log(canvasSrc.width);
+    canvasSrc = new fabric.Canvas('canvas-src', {
+        width: roootStyle.getPropertyValue('--canvas-width'),
+        height: roootStyle.getPropertyValue('--canvas-height'),
+    });
+    console.log(canvasSrc.width);
+}); 
+*/
+
 window.addEventListener('load', async () => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -73,11 +89,13 @@ window.addEventListener('load', async () => {
     updateBrush();
 });
 
-export function disableDrawingMode(bool) {
-    if (bool) {
-        canvasSrc.isDrawingMode = false;
-    } else {
+export function enableDrawingMode(input) {
+    if (input) {
+        canvasAndControlsSection.classList.remove('disabled');
         canvasSrc.isDrawingMode = true;
+    } else {
+        canvasAndControlsSection.classList.add('disabled');
+        canvasSrc.isDrawingMode = false;
     }
 }
 
@@ -161,5 +179,5 @@ function displayPaths() {
 
 function displayError() {
     //eslint ignore next line
-    alert(error);
+    console.log(error);
 }

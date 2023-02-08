@@ -29,6 +29,7 @@ export function renderGuess(guess) {
     const li = document.createElement('li');
     li.textContent = guess.guess;
     li.classList.add('nes-input');
+    li.classList.add('guess');
     return li;
 }
 

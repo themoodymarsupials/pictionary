@@ -14,7 +14,7 @@ import {
     updateProfile,
 } from '../fetch-utils.js';
 import { renderGuess } from '../render-utils.js';
-import { disableDrawingMode, resetCanvas } from './canvas.js';
+import { enableDrawingMode, resetCanvas } from './canvas.js';
 
 //DOM
 const errorDisplay = document.getElementById('error-display');
@@ -33,14 +33,14 @@ let guesses = [];
 let guessCur = null;
 let game = null;
 let timeObj = null;
-let error = null;
+let error = { message: '' };
 let userId = null;
 let userProfile = null;
 
 // inprogress: timer running, people can draw, people can guess
 // not inprogress: timer not running. people cannot draw. people cannot guess. If there is a winner in the database, display the winner.
 
-//events
+// events
 window.addEventListener('load', async () => {
     // get gameID
     const searchParams = new URLSearchParams(location.search);
@@ -49,52 +49,43 @@ window.addEventListener('load', async () => {
         location.replace('/');
         return;
     }
-    //get User and profile
+
+    //get User, profile, game, word, guesses from database
     const userResponse = await getUser();
     handleResponse(userResponse, 'userId');
     const userProfileResponse = await getProfile(userId);
     handleResponse(userProfileResponse, 'userProfile');
-
-    // Get game/word/guesses from database
     const gameResponse = await getGame(gameId);
-    handleResponse(gameResponse, 'game');
+    handleResponse(gameResponse, 'gameUpdate');
     const wordsResponse = await getWords();
     handleResponse(wordsResponse, 'words');
     const guessesGetResponse = await getGuesses(gameId);
     handleResponse(guessesGetResponse, 'guessesGet');
 
-    // IF game is stopped -> set all users to guessers
-    if (game.game_in_progress === false) {
-        userProfile.is_drawer = false;
-        disableDrawingMode(true);
-    }
-
     // If NO game -> exit
     if (!game) {
         location.replace('/');
     } else {
-        resetTimer();
-        configureTimer();
         displayGame();
+        continueGame();
         displayGuesses();
-        displayWord();
-        checkDrawer();
     }
 
     // execute on all game updates
     onGameUpdate(game.id, async (payload) => {
+        const prevGameState = payload.old;
         game = payload.new;
-        if (game.game_in_progress === false) {
-            gameInfo.textContent = 'Game is over';
-            await stopGame();
-        } else {
-            gameInfo.textContent = 'The game has started!';
+        // Game was stopped, update -> start game
+        if (prevGameState.game_in_progress === false && game.game_in_progress === true) {
+            await startGameReceive();
         }
-        resetTimer();
-        configureTimer();
-        displayWord();
+        // Game was in progress, update -> stop game
+        else if (prevGameState.game_in_progress === true && game.game_in_progress === false) {
+            await stopGameReceive();
+        }
     });
 
+    // execute on all guess updates
     onGuess(game.id, async (payload) => {
         const guessId = payload.new.id;
         const guessGetResponse = await getGuess(guessId);
@@ -104,66 +95,30 @@ window.addEventListener('load', async () => {
 });
 
 startGameButton.addEventListener('click', async () => {
-    // if game is in progress -> deactivate button
-    if (game.game_in_progress === true) {
-        startGameButton.disabled = true;
-        return;
-    }
-
-    // Update Game + Set timer
-    gameInfo.textContent = 'The game has started!';
+    // Update profile
     userProfile.is_drawer = true;
-    disableDrawingMode(false);
     const profileUpdateResponse = await updateProfile(userProfile);
     handleResponse(profileUpdateResponse, 'updateProfile');
 
-    checkDrawer();
-    resetCanvas();
-    game.game_in_progress = true;
-    game.word = generateWord().toLowerCase();
-    game.start_time = Date.now();
-    timeObj.endTime = game.start_time + timeObj.lengthOfGame;
-    updateGame(game);
+    // Start game
+    await startGameSend();
 });
 
 addGuessForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (checkDrawer()) {
-        gameInfo.textContent = 'You are the Drawer!';
-        return;
-    }
     const formData = new FormData(addGuessForm);
     guessCur = formData.get('guess').toLowerCase();
     const guessInsert = {
         guess: guessCur,
         game_id: game.id,
         is_correct: game.word === guessCur,
-        // is_correct: checkGuess(),
     };
     const guessCreateResponse = await createGuess(guessInsert);
     handleResponse(guessCreateResponse, 'guessCreate');
-    await checkGuess();
-});
-
-async function checkGuess() {
     if (game.word === guessCur) {
-        await stopGame();
-        gameInfo.textContent = 'You are awesome! ...also the game is over!';
-        return true;
-    } else {
-        return false;
+        await stopGameSend();
     }
-}
-
-function checkDrawer() {
-    if (userProfile.is_drawer) {
-        randomWord.classList.remove('hidden');
-        disableDrawingMode(false);
-        return true;
-    } else {
-        return false;
-    }
-}
+});
 
 // Calls to database
 function handleResponse(response, type) {
@@ -175,7 +130,7 @@ function handleResponse(response, type) {
         // this is called "short-circuit evaluation"
         // second expression only executes if the first is true
         // "if true" && "do this"
-        type === 'game' && (game = response.data);
+        type === 'gameUpdate' && (game = response.data);
         type === 'words' && (words = response.data);
         type === 'guessesGet' && (guesses = response.data);
         type === 'guessGet' && guesses.unshift(response.data);
@@ -187,21 +142,122 @@ function handleResponse(response, type) {
     }
 }
 
-/* Utility Functions */
-async function stopGame() {
-    if (game.game_in_progress) {
-        game.game_in_progress = false;
-        game.game_state = 'results';
-        await updateGame(game);
-    }
-    startGameButton.disabled = false;
-    userProfile.is_drawer = false;
-    timeObj.timeLeft = 0;
-    clearInterval(timeObj.Timer);
-    resetTimer();
-    await updateProfile(userProfile);
+/* GameState Functions */
+
+// initiate start game
+async function startGameSend() {
+    // Update Game
+    const gameUpdate = game;
+    gameUpdate.game_in_progress = true;
+    gameUpdate.game_state = 'in-progress';
+    gameUpdate.start_time = Date.now();
+    gameUpdate.word = generateWord().toLowerCase();
+    const gameUpdateResponse = await updateGame(gameUpdate);
+    handleResponse(gameUpdateResponse, 'gameUpdate');
 }
 
+// actually start game
+async function startGameReceive() {
+    if (!game.game_in_progress) {
+        error.message = 'startGameReceive error';
+        displayError();
+        return;
+    }
+    configureTimer();
+    updateDisplays();
+    resetCanvas();
+}
+
+// initiate stop game
+async function stopGameSend() {
+    // Update Game
+    const gameUpdate = game;
+    gameUpdate.game_in_progress = false;
+    gameUpdate.game_state = 'results';
+    gameUpdate.start_time = null;
+    const gameUpdateResponse = await updateGame(gameUpdate);
+    handleResponse(gameUpdateResponse, 'gameUpdate');
+}
+
+// actually stop game
+async function stopGameReceive() {
+    if (game.game_in_progress) {
+        error.message = 'stopGameReceive error';
+        displayError();
+        return;
+    }
+    // update profile
+    userProfile.is_drawer = false;
+    const profileUpdateResponse = await updateProfile(userProfile);
+    handleResponse(profileUpdateResponse, 'updateProfile');
+    updateDisplays();
+    configureTimer();
+}
+
+// Continue a game on page reload
+function continueGame() {
+    updateDisplays();
+    configureTimer();
+}
+
+function updateDisplays() {
+    if (game.game_in_progress) {
+        displayStartBtn('in_progress');
+        if (userProfile.is_drawer) {
+            enableDrawingMode(true);
+            displayWord('drawer');
+            displayGameInfo('in_progress', 'drawer');
+            displayGuessInput('in_progress', 'drawer');
+        } else if (!userProfile.is_drawer) {
+            displayWord('guesser');
+            displayGameInfo('in_progress', 'guesser');
+            displayGuessInput('in_progress', 'guesser');
+        }
+    } else {
+        enableDrawingMode(false);
+        displayGameInfo('results');
+        displayStartBtn('stopped');
+        displayGuessInput('stopped');
+    }
+}
+
+/* Timer Functions */
+
+// Used to start/stop/continue game
+function configureTimer() {
+    if (game.game_in_progress) {
+        resetTimer();
+        // If no endTime -> calculate
+        if (!timeObj.endTime) {
+            timeObj.endTime = game.start_time + timeObj.lengthOfGame;
+        }
+        // If no current timer -> start timerTick
+        if (!timeObj.Timer) {
+            timeObj.Timer = setInterval(timerTick, 1000);
+        }
+    } else {
+        timeObj && timeObj.Timer && clearInterval(timeObj.Timer);
+        resetTimer();
+        displayTime('stopped');
+    }
+}
+
+// Executes every 1 second ~ called by setInterval(timerTick, 1000)
+function timerTick() {
+    if (game.game_in_progress) {
+        // decrement timeLeft by 1 second
+        timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
+        displayTime('in_progress');
+        // if time is up ->
+        if (timeObj.timeLeft <= 0) {
+            stopGameSend();
+        }
+    }
+}
+
+/* Utility Functions */
+
+// Automatically called by configureTimer()
 function resetTimer() {
     timeObj = {
         lengthOfGame: 60000,
@@ -211,43 +267,18 @@ function resetTimer() {
     };
 }
 
-function configureTimer() {
-    // more "short-circuit evaluations"
-    if (game.game_in_progress) {
-        // If no endTime -> calculate
-        if (!timeObj.endTime) {
-            timeObj.endTime = game.start_time + timeObj.lengthOfGame;
-        }
-        // If no current timer -> start timerTick
-        if (!timeObj.Timer) {
-            timeObj.Timer = setInterval(timerTick, 1000);
-        }
-        // !timeObj.endTime && (timeObj.endTime = game.start_time + timeObj.lengthOfGame);
-        // !timeObj.Timer && (timeObj.Timer = setInterval(timerTick, 1000));
-    }
-}
-
 function generateWord() {
     // get word from words array
     const randomNumber = Math.floor(Math.random() * words.length);
     return words[randomNumber].word;
 }
 
-// Executes every 1 second ~ called by setInterval(timerTick, 1000)
-function timerTick() {
-    // debugger;
-    if (game.game_in_progress) {
-        // decrement timeLeft by 1 second
-        timeObj.timeLeft = Math.floor((timeObj.endTime - Date.now()) / 1000);
-        // if time is up ->
-        if (timeObj.timeLeft <= 0) {
-            stopGame();
-        }
-    }
-    displayTime();
+function scrollToBottomOfGuesses() {
+    const guessListContainer = document.getElementById('guess-list-container');
+    guessListContainer.scrollTop = guessListContainer.scrollHeight;
 }
 
-//display functions
+/* Display Functions */
 function displayGame() {
     gameTitle.textContent = game.title;
     if (game.image_url) {
@@ -256,15 +287,58 @@ function displayGame() {
         gameImage.src = '/assets/game-placeholder.png';
     }
 }
-function displayTime() {
-    timer.textContent = `${timeObj.timeLeft} seconds`;
+function displayGameInfo(gameState, role) {
+    if (gameState === 'stopped') {
+        gameInfo.textContent = 'Click the Start Game button to start!';
+    } else if (gameState === 'results') {
+        gameInfo.textContent = 'results';
+    } else if (gameState === 'in_progress') {
+        if (role === 'drawer') {
+            gameInfo.textContent = 'Game Started: You are the Drawer!';
+        } else if (role === 'guesser') {
+            gameInfo.textContent = 'Game Started: You are a Guesser!';
+        }
+    } else {
+        error.message = 'error in displayGameInfo';
+        displayError();
+    }
 }
-function displayWord() {
+function displayTime(gameState) {
+    if (gameState === 'in_progress') {
+        timer.classList.remove('hidden');
+        timer.textContent = `${timeObj.timeLeft} seconds`;
+    } else if (gameState === 'stopped') {
+        timer.textContent = `0 seconds`;
+        timer.classList.add('hidden');
+    } else {
+        error.message = 'error in displayTime';
+        displayError();
+    }
+}
+function displayStartBtn(gameState) {
+    if (gameState === 'in_progress') {
+        startGameButton.disabled = true;
+        startGameButton.classList.add('hidden');
+    } else if (gameState === 'stopped') {
+        startGameButton.disabled = false;
+        startGameButton.classList.remove('hidden');
+    } else {
+        error.message = 'error in displayStartBtn';
+        displayError();
+    }
+}
+function displayWord(role) {
     if (game.word) {
         randomWord.textContent = game.word;
     }
-    if (userProfile.is_drawer === false) {
+    if (role === 'drawer') {
+        randomWord.classList.remove('hidden');
+    } else if (role === 'guesser') {
+        randomWord.textContent = '';
         randomWord.classList.add('hidden');
+    } else {
+        error.message = 'error in displayWord';
+        displayError();
     }
 }
 function displayGuesses() {
@@ -275,7 +349,20 @@ function displayGuesses() {
         if (guess.is_correct) {
             guessEl.classList.add('correct-answer');
         }
-        guessList.append(guessEl);
+        guessList.prepend(guessEl);
+        scrollToBottomOfGuesses();
+    }
+}
+function displayGuessInput(gameState, role) {
+    if (gameState === 'stopped' || role === 'drawer') {
+        addGuessForm.disabled = true;
+        addGuessForm.classList.add('disabled', 'darken');
+    } else if (gameState === 'in_progress' && role === 'guesser') {
+        addGuessForm.disabled = false;
+        addGuessForm.classList.remove('disabled', 'darken');
+    } else {
+        error.message = 'error in displayGuessInput';
+        displayError();
     }
 }
 function displayError() {

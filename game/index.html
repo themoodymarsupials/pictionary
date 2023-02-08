@@ -64,51 +64,57 @@
         </nav>
 
         <main class="game-main">
-            <h2 class="header-title">
-                <img src="../assets/pencil.png" id="pencil-image" /> Let's play!
-                <img src="../assets/pencil.png" id="pencil-image-two" />
-            </h2>
-
             <section id="game-view" class="game-summary nes-input">
                 <p id="game-title">Post</p>
                 <img id="game-image" src="../assets/game-placeholder.png" />
             </section>
 
-            <section id="generate-word-section" class="nes-input">
+            <section id="game-board" class="nes-input">
                 <h3 class="game-info" id="game-info">
                     Click below to start a game and generate a word!
                 </h3>
-                <div id="game-buttons">
-                    <button id="start-game" class="nes-btn">Start Game</button>
-                </div>
-                <p id="random-word" class="hidden"></p>
+                <button id="start-game" class="nes-btn hidden">Start Game</button>
+                <span id="timer"> </span>
             </section>
 
             <div class="game-section">
-                <div class="canvas-and-controls">
-                    <section id="canvas-options" class="game-summary canvas-options nes-input">
-                        <span id="timer"></span>
-                        <input type="color" name="color" id="color-selector" class="nes-input" />
-                        <button type="button" id="draw-mode" class="nes-btn is-primary">
+                <section class="canvas-and-controls disabled" id="canvas-and-controls-section">
+                    <div id="canvas-options" class="game-summary canvas-options nes-input">
+                        <p id="random-word"></p>
+                        <input
+                            type="color"
+                            name="color"
+                            id="color-selector"
+                            class="game-buttons nes-input"
+                        />
+                        <button
+                            type="button"
+                            id="draw-mode"
+                            class="game-buttons nes-btn is-primary"
+                        >
                             <img src="../assets/pencil (1).png" class="draw-mode-icon" />
                         </button>
-                        <button type="button" id="erase-mode" class="nes-btn is-warning">
+                        <button
+                            type="button"
+                            id="erase-mode"
+                            class="game-buttons nes-btn is-warning"
+                        >
                             <img src="../assets/eraser.png" class="draw-mode-icon" />
                         </button>
-                        <button id="clear-canvas" class="nes-btn">Reset</button>
-                    </section>
+                        <button id="clear-canvas" class="game-buttons nes-btn">Reset</button>
+                    </div>
                     <section id="canvas-section" class="nes-input">
-                        <canvas id="canvas-src"></canvas>
+                        <canvas id="canvas-src" height="550" width="550"></canvas>
                     </section>
-                </div>
-                <section #add-guess-section>
-                    <div>
-                        <form id="add-guess-form">
-                            <input name="guess" placeholder="Add your guess here..." required />
-                            <button>Guess</button>
-                        </form>
+                </section>
+                <section id="add-guess-section" class="nes-input">
+                    <div id="guess-list-container">
                         <ul id="guess-list"></ul>
                     </div>
+                    <form id="add-guess-form" class="disabled darken">
+                        <input name="guess" placeholder="Add your guess here..." required />
+                        <button>Guess</button>
+                    </form>
                 </section>
             </div>
         </main>
